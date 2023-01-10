@@ -92,7 +92,6 @@ jobs:
       #   uses: 'google-github-actions/auth@v0'
       #   with:
       #     credentials_json: '${{ secrets.GCP_CREDENTIALS }}''
-
       # BEGIN - Docker auth and build (NOTE: If you already have a container image, these Docker steps can be omitted)
 
       # Authenticate Docker to Google Cloud Artifact Registry
@@ -121,12 +120,6 @@ jobs:
             --region ${{ env.REGION }} \
             --project ${{ env.PROJECT_ID }} \
             --format json \
-            --update-env-vars SERVICE_NAME="Card Service" \
-            --update-secrets DB_DATABASE=DB_DATABASE:latest \
-            --update-secrets DB_USERNAME=DB_USERNAME:2 \
-            --update-secrets DB_PASSWORD=DB_PASSWORD:2 \
-            --update-secrets DB_CLOUD_SQL_INSTANCE=DB_CLOUD_SQL_INSTANCE:1 \
-            --service-account card-service-cloudrun@noted-ensign-357703.iam.gserviceaccount.com \
             --allow-unauthenticated
 
       # If required, use the Cloud Run url output in later steps
