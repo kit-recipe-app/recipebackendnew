@@ -10,6 +10,8 @@ spring:
     password: 12345678
 
     hikari:
+      minimum-idle: 2
+      maximum-pool-size: 5
       data-source-properties:
         socketFactory: com.google.cloud.sql.postgres.SocketFactory
         cloudSqlInstance: recipe-app-demo-374220:europe-west3:demodb
