@@ -31,5 +31,5 @@ public class TestController {
         todoEntity.setName("test");
         todoRepository.save(todoEntity);
         return "added";
-    } 
+    }
 }
