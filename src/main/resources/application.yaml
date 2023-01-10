@@ -1,6 +1,5 @@
 server:
-  servlet:
-    context-path: /recipes
+  port: 8080
 
 
 spring:
