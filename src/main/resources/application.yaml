@@ -5,9 +5,9 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql:///${DB_DATABASE}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: jdbc:postgresql:///${DB_DATABASE:postgres}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:12345678}
 
     hikari:
       minimum-idle: 2
