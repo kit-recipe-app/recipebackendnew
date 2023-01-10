@@ -5,16 +5,16 @@ server:
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql:///postgres
-    username: postgres
-    password: 12345678
+    url: jdbc:postgresql:///${DB_DATABASE}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
     hikari:
       minimum-idle: 2
       maximum-pool-size: 5
       data-source-properties:
         socketFactory: com.google.cloud.sql.postgres.SocketFactory
-        cloudSqlInstance: recipe-app-demo-374220:europe-west3:demodb
+        cloudSqlInstance: ${CLOUD_SQL_INSTANCE}
 
   jpa:
     hibernate:
