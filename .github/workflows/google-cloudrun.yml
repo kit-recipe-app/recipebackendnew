@@ -52,10 +52,10 @@ on:
 
 env:
   PROJECT_ID: recipe-app-demo-374220
-  GAR_LOCATION: europe-west3-b
+  GAR_LOCATION: europe-west3
   REPOSITORY: recipebackendnew-repository
   SERVICE: recipebackendnew
-  REGION: europe-west3-b
+  REGION: europe-west3
 
 jobs:
   deploy:
