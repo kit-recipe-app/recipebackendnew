@@ -83,8 +83,8 @@ jobs:
         uses: 'google-github-actions/auth@v0'
         with:
           token_format: 'access_token'
-          workload_identity_provider: projects/383465424928/locations/global/workloadIdentityPools/github-pool/providers/github-provider
-          service_account:  github-build-deploy-cloudrun@recipe-app-demo-374220.iam.gserviceaccount.com
+          workload_identity_provider: ${{ secrets.WIF_PROVIDER }}
+          service_account:  ${{ secrets.WIF_SERVICE_ACCOUNT }}
 
       # NOTE: Alternative option - authentication via credentials json
       # - name: Google Auth
