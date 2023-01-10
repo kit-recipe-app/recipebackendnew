@@ -53,7 +53,7 @@ on:
 env:
   PROJECT_ID: recipe-app-demo-374220
   GAR_LOCATION: europe-west3-b
-  REPOSITORY: card-service-repository
+  REPOSITORY: recipebackendnew-repository
   SERVICE: recipebackendnew
   REGION: europe-west3-b
 
