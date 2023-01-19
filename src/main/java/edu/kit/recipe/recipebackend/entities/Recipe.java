@@ -1,10 +1,7 @@
 package edu.kit.recipe.recipebackend.entities;
 
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;
@@ -22,8 +19,14 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "recipe_id")
     private Long id;
-
     private String name;
+
+
+    private String description;
+
+
+    @OneToMany(targetEntity = CookingInstruction.class, cascade = CascadeType.ALL)
+    private List<CookingInstruction> cookingInstructions;
 
 
 

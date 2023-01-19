@@ -72,7 +72,6 @@ public class RecipeController {
 
 
 
-
     @GetMapping("/recipes/{id}/ingredients")
     public ResponseEntity<List<IngredientsWithAmount>> getIngredientsForRecipe(@PathVariable String id) {
         Optional<Recipe> recipe = recipeRepository.findById(Long.parseLong(id));
@@ -90,24 +89,22 @@ public class RecipeController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        Optional<Ingredient> found =  ingredientRepository.findById(Long.parseLong(ingredientId));
-        if (found.isEmpty()) {
+        Optional<Ingredient> passedIngredient =  ingredientRepository.findById(Long.parseLong(ingredientId));
+        if (passedIngredient.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         Optional<Unit> unit = unitRepository.findByName(amount.unit());
-
         if (unit.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         IngredientsWithAmount ingredientsWithAmount = new IngredientsWithAmount();
         ingredientsWithAmount.setAmountInformation(new AmountInformation(amount.amount(), unit.get()));
-        ingredientsWithAmount.setIngredient(found.get());
+        ingredientsWithAmount.setIngredient(passedIngredient.get());
         recipe.get().getIngredients().add(ingredientsWithAmount);
 
         ingredientWithAmountRepository.save(ingredientsWithAmount);
         recipeRepository.save(recipe.get());
-
         return ResponseEntity.ok(ingredientsWithAmount);
     }
 }
