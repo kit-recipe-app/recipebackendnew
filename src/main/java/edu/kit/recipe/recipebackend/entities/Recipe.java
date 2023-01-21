@@ -3,10 +3,12 @@ package edu.kit.recipe.recipebackend.entities;
 
 import lombok.*;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @Entity
@@ -16,9 +18,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Recipe {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Column(name = "recipe_id")
-    private Long id;
+    private UUID id;
     private String name;
 
 

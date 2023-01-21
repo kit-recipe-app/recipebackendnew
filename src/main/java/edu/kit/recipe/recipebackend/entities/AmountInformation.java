@@ -6,9 +6,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.hibernate.Hibernate;
+import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Objects;
+import java.util.UUID;
 
 
 @Getter
@@ -19,9 +21,13 @@ import java.util.Objects;
 @Entity
 public class AmountInformation {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+            name = "UUID",
+            strategy = "org.hibernate.id.UUIDGenerator"
+    )
     @Column(name = "amount_id", nullable = false)
-    private Long id;
+    private UUID id;
     @OneToOne
     @JoinColumn(name = "unit_id")
     private Unit unit;
