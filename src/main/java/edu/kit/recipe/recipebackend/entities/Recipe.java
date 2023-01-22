@@ -1,6 +1,7 @@
 package edu.kit.recipe.recipebackend.entities;
 
 
+import edu.kit.recipe.recipebackend.entities.image.ImageData;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
@@ -44,9 +45,10 @@ public class Recipe {
     private List<IngredientsWithAmount> ingredients;
 
 
-    public String getName() {
-        return name;
-    }
+    @OneToOne(targetEntity = ImageData.class, cascade = CascadeType.ALL)
+    private ImageData imageData;
+
+
 
     public void addIngredientInformation(IngredientsWithAmount ingredient) {
         if (ingredients == null) {
