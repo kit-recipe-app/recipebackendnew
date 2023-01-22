@@ -4,11 +4,10 @@ package edu.kit.recipe.recipebackend.controller.api.v1;
 
 import edu.kit.recipe.recipebackend.dto.*;
 import edu.kit.recipe.recipebackend.entities.*;
+import edu.kit.recipe.recipebackend.entities.image.ImageData;
 import edu.kit.recipe.recipebackend.entities.units.Unit;
-import edu.kit.recipe.recipebackend.repository.IngredientRepository;
-import edu.kit.recipe.recipebackend.repository.IngredientWithAmountRepository;
-import edu.kit.recipe.recipebackend.repository.RecipeRepository;
-import edu.kit.recipe.recipebackend.repository.UnitRepository;
+import edu.kit.recipe.recipebackend.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,8 @@ import java.util.UUID;
 
 
 @Controller
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/recipes")
+@RequiredArgsConstructor
 public class RecipeController {
 
 
@@ -29,47 +29,14 @@ public class RecipeController {
     private final UnitRepository unitRepository;
     private final IngredientWithAmountRepository ingredientWithAmountRepository;
 
-    public RecipeController(IngredientRepository ingredientRepository, RecipeRepository recipeRepository, UnitRepository unitRepository, IngredientWithAmountRepository ingredientWithAmountRepository) {
-        this.ingredientRepository = ingredientRepository;
-        this.recipeRepository = recipeRepository;
-        this.unitRepository = unitRepository;
-        this.ingredientWithAmountRepository = ingredientWithAmountRepository;
-    }
+    private final ImageRepository imageRepository;
 
 
-    @GetMapping("/ingredients")
-    public ResponseEntity<List<Ingredient>> getIngredients() {
-        return ResponseEntity.ok(ingredientRepository.findAll());
-    }
-
-    @PostMapping("/ingredients")
-    public ResponseEntity<Ingredient> addIngredient(@RequestBody IngredientDTO ingredient) {
-        if (ingredient.name() == null || ingredient.name().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        Ingredient newIngredient = new Ingredient();
-        newIngredient.setName(ingredient.name());
-        Optional<Ingredient> found =  ingredientRepository.findByNameContainsIgnoreCase(
-                ingredient.name()
-            );
-        if (found.isPresent()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        }
-        return ResponseEntity.ok(ingredientRepository.save(newIngredient));
-    }
 
 
-    @DeleteMapping("/ingredients/{id}")
-    public ResponseEntity<String> deleteIngredient(@PathVariable String id) {
-        Optional<Ingredient> ingredient = ingredientRepository.findById(UUID.fromString(id));
-        if (ingredient.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        ingredientRepository.delete(ingredient.get());
-        return ResponseEntity.ok("Deleted");
-    }
 
-    @PostMapping("/recipes")
+
+    @PostMapping
     public ResponseEntity<Recipe> addRecipe(@RequestBody RecipeDTO recipe) {
         Recipe newRecipe = new Recipe();
         if (recipe.name() == null || recipe.name().isEmpty()) {
@@ -117,14 +84,14 @@ public class RecipeController {
 
 
 
-    @GetMapping("/recipes/{id}/ingredients")
+    @GetMapping("/{id}/ingredients")
     public ResponseEntity<List<IngredientsWithAmount>> getIngredientsForRecipe(@PathVariable String id) {
         Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(id));
         return recipe.map(value -> ResponseEntity.ok(value.getIngredients()))
                 .orElseGet(() -> ResponseEntity.badRequest().build());
     }
 
-    @GetMapping("/recipes")
+    @GetMapping
     public ResponseEntity<List<Recipe>> getRecipeNameWithID() {
         return ResponseEntity.ok(recipeRepository.findAll());
     }
@@ -132,7 +99,7 @@ public class RecipeController {
 
 
 
-    @PostMapping("/recipes/{recipeId}/ingredients/{ingredientId}")
+    @PostMapping("/{recipeId}/ingredients/{ingredientId}")
     public ResponseEntity<IngredientsWithAmount> addIngredientToRecipe(@PathVariable String recipeId, @RequestBody AmountInformationDTO amount, @PathVariable String ingredientId) {
         Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
         if (recipe.isEmpty()) {
@@ -156,5 +123,27 @@ public class RecipeController {
         ingredientWithAmountRepository.save(ingredientsWithAmount);
         recipeRepository.save(recipe.get());
         return ResponseEntity.ok(ingredientsWithAmount);
+    }
+
+    @PostMapping("/{recipeId}/image/{imageId}")
+    public ResponseEntity<String> addImageToRecipe(@PathVariable String recipeId, @PathVariable String imageId ) {
+        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
+        if (recipe.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        Optional<ImageData> image = imageRepository.findById(UUID.fromString(imageId));
+
+        if (image.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        recipe.get().setImageData(image.get());
+        recipeRepository.save(recipe.get());
+        return ResponseEntity.ok("Image added to recipe");
+    }
+
+    @GetMapping("/{recipeId}/image")
+    public ResponseEntity<String> getImageForRecipe(@PathVariable String recipeId) {
+        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
+        return recipe.map(value -> ResponseEntity.ok(value.getImageData().getName())).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
