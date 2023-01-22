@@ -1,4 +1,4 @@
-package edu.kit.recipe.recipebackend.controller.api.v1;
+package edu.kit.recipe.recipebackend.controller.api.v1.recipe;
 
 
 
