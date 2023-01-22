@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -47,6 +48,13 @@ public class Recipe {
         return name;
     }
 
+    public void addIngredientInformation(IngredientsWithAmount ingredient) {
+        if (ingredients == null) {
+            ingredients = new ArrayList<>();
+        }
+        ingredients.add(ingredient);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -58,5 +66,12 @@ public class Recipe {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public void addCookingInstruction(CookingInstruction instruction) {
+        if (cookingInstructions == null) {
+            cookingInstructions = new ArrayList<>();
+        }
+        cookingInstructions.add(instruction);
     }
 }

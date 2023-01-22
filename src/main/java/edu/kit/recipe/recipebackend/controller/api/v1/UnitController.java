@@ -7,15 +7,13 @@ import edu.kit.recipe.recipebackend.entities.units.Unit;
 import edu.kit.recipe.recipebackend.repository.UnitRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
 
-@RestController("/api")
+@RestController
+@RequestMapping("/api/v1/units")
 public class UnitController {
     private final UnitRepository unitRepository;
 
@@ -25,7 +23,8 @@ public class UnitController {
 
 
 
-    @PostMapping("/units")
+
+    @PostMapping
     public ResponseEntity<Unit> addUnit(@RequestBody UnitDTO unit) {
         if (unit.name() == null || unit.name().isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -41,7 +40,7 @@ public class UnitController {
         return ResponseEntity.ok(unitRepository.save(newUnit));
     }
 
-    @GetMapping("/units")
+    @GetMapping
     public ResponseEntity<List<Unit>> getUnits() {
         return ResponseEntity.ok(unitRepository.findAll());
     }

@@ -11,5 +11,6 @@ import java.util.UUID;
 public interface UnitRepository extends JpaRepository<Unit, UUID> {
     Optional<Unit> findByName(@NonNull String name);
 
+    Optional<Unit> findByNameContainsIgnoreCase(String unit);
 }
 
