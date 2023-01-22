@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 
 @Controller
@@ -65,7 +66,7 @@ public class RecipeController {
 
     @DeleteMapping("/ingredients/{id}")
     public ResponseEntity<String> deleteIngredient(@PathVariable String id) {
-        Optional<Ingredient> ingredient = ingredientRepository.findById(Long.parseLong(id));
+        Optional<Ingredient> ingredient = ingredientRepository.findById(UUID.fromString(id));
         if (ingredient.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -85,7 +86,7 @@ public class RecipeController {
 
     @GetMapping("/recipes/{id}/ingredients")
     public ResponseEntity<List<IngredientsWithAmount>> getIngredientsForRecipe(@PathVariable String id) {
-        Optional<Recipe> recipe = recipeRepository.findById(Long.parseLong(id));
+        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(id));
         return recipe.map(value -> ResponseEntity.ok(value.getIngredients()))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
@@ -95,12 +96,12 @@ public class RecipeController {
 
     @PostMapping("/recipes/{recipeId}/ingredients/{ingredientId}")
     public ResponseEntity<IngredientsWithAmount> addIngredientToRecipe(@PathVariable String recipeId, @RequestBody AmountInformationDTO amount, @PathVariable String ingredientId) {
-        Optional<Recipe> recipe = recipeRepository.findById(Long.parseLong(recipeId));
+        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
         if (recipe.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
-        Optional<Ingredient> passedIngredient =  ingredientRepository.findById(Long.parseLong(ingredientId));
+        Optional<Ingredient> passedIngredient =  ingredientRepository.findById(UUID.fromString(ingredientId));
         if (passedIngredient.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
