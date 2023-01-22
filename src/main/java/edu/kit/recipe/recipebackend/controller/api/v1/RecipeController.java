@@ -62,6 +62,17 @@ public class RecipeController {
         return ResponseEntity.ok(ingredientRepository.save(newIngredient));
     }
 
+
+    @DeleteMapping("/ingredients/{id}")
+    public ResponseEntity<String> deleteIngredient(@PathVariable String id) {
+        Optional<Ingredient> ingredient = ingredientRepository.findById(Long.parseLong(id));
+        if (ingredient.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        ingredientRepository.delete(ingredient.get());
+        return ResponseEntity.ok("Deleted");
+    }
+
     @PostMapping("/recipes")
     public ResponseEntity<Recipe> addRecipe(@RequestBody RecipeDTO recipe) {
         Recipe newRecipe = new Recipe();

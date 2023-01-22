@@ -32,6 +32,7 @@ public class Recipe {
 
 
     @OneToMany(targetEntity = CookingInstruction.class, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private List<CookingInstruction> cookingInstructions;
 
 
