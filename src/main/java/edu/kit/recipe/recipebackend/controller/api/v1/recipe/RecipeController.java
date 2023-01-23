@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 
 @Controller
@@ -23,7 +24,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RecipeController {
 
-
+    private final Logger logger = Logger.getLogger(RecipeController.class.getName());
     private final IngredientRepository ingredientRepository;
     private final RecipeRepository recipeRepository;
     private final UnitRepository unitRepository;
@@ -40,28 +41,34 @@ public class RecipeController {
     public ResponseEntity<Recipe> addRecipe(@RequestBody RecipeDTO recipe) {
         Recipe newRecipe = new Recipe();
         if (recipe.name() == null || recipe.name().isEmpty()) {
+            logger.warning("Name is null or empty");
             return ResponseEntity.badRequest().build();
         }
         newRecipe.setName(recipe.name());
 
         if (recipe.description() == null || recipe.description().isEmpty()) {
+            logger.warning("Description is null or empty");
             return ResponseEntity.badRequest().build();
         }
         newRecipe.setDescription(recipe.description());
 
         if (recipe.ingredients() == null || recipe.ingredients().isEmpty()) {
+            logger.warning("Ingredients are null or empty");
             return ResponseEntity.badRequest().build();
         }
         for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
             Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
             if (found.isEmpty()) {
+                logger.warning("Ingredient not found");
                 return ResponseEntity.badRequest().build();
             }
             Optional<Unit> unit = unitRepository.findByNameContainsIgnoreCase(ingredientInformation.amount().unit());
             if (unit.isEmpty()) {
+                logger.warning("Unit not found");
                 return ResponseEntity.badRequest().build();
             }
             if (ingredientInformation.amount().amount()<= 0) {
+                logger.warning("Amount is not valid");
                 return ResponseEntity.badRequest().build();
             }
             IngredientsWithAmount newIngredient = new IngredientsWithAmount();
@@ -72,6 +79,7 @@ public class RecipeController {
 
         for (CookingInstructionDTO cookingInstruction : recipe.cookingInstructions()) {
             if (cookingInstruction.instruction() == null || cookingInstruction.instruction().isEmpty()) {
+                logger.warning("Instruction is null or empty");
                 return ResponseEntity.badRequest().build();
             }
             CookingInstruction newInstruction = new CookingInstruction();
