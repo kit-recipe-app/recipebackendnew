@@ -92,8 +92,8 @@ public class RecipeController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Recipe>> getRecipeNameWithID() {
-        return ResponseEntity.ok(recipeRepository.findAll());
+    public ResponseEntity<List<RecipeInfo>> getRecipeNameWithID() {
+        return ResponseEntity.ok(recipeRepository.findAllProjectedBy());
     }
 
 
