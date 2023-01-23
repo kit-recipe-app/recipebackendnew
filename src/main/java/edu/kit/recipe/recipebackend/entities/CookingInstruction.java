@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,6 +27,9 @@ public class CookingInstruction {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private UUID id;
+
+
+    @Column(length = 10000)
     private String instruction;
 
     @Override
