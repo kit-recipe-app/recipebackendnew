@@ -6,6 +6,8 @@ spring:
   profiles:
     active: prod
 
-
+springdoc:
+  swagger-ui:
+    path: /api-docs.html
 
 
