@@ -3,9 +3,8 @@ package edu.kit.recipe.recipebackend.entities.image;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
+import jakarta.persistence.*;
 
-import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,9 +26,10 @@ public class ImageData {
 
     private String name;
     private String type;
+
+    //In further development this should be annotated with an imageType to prevent @Transactional Statements
     @Lob
-    @Column(length = 1000)
-    @Type(type = "org.hibernate.type.ImageType")
+    @Column(length = 10000)
     private byte[] image;
 
     @Override

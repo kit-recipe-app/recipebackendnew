@@ -6,7 +6,7 @@ import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -40,7 +40,6 @@ public class Recipe {
 
 
     @OneToMany(targetEntity = IngredientsWithAmount.class, cascade = CascadeType.ALL)
-    @JoinColumn(name = "recipe_foreign_key", referencedColumnName = "recipe_id")
     @ToString.Exclude
     private List<IngredientsWithAmount> ingredients;
 

@@ -5,6 +5,7 @@ import edu.kit.recipe.recipebackend.entities.image.ImageData;
 import edu.kit.recipe.recipebackend.repository.ImageDataInfo;
 import edu.kit.recipe.recipebackend.repository.ImageRepository;
 import edu.kit.recipe.recipebackend.utils.ImageUtils;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,42 +22,43 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ImageController {
 
-	private final ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
 
     @PostMapping
-	public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file)  {
-		if (file == null || file.isEmpty() || file.getOriginalFilename() == null || file.getOriginalFilename().isEmpty()) {
-			return ResponseEntity.badRequest().build();
-		}
+    public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) {
+        if (file == null || file.isEmpty() || file.getOriginalFilename() == null || file.getOriginalFilename().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
 
-		 try {
-			 imageRepository.save(ImageData.builder()
-					 .name(file.getOriginalFilename())
-					 .type(file.getContentType())
-					 .image(ImageUtils.compressImage(file.getBytes())).build());
-		 }
-		 catch (IOException e) {
-			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-		 }
-		return ResponseEntity.status(HttpStatus.OK).build();
-	}
+        try {
+            imageRepository.save(ImageData.builder()
+                    .name(file.getOriginalFilename())
+                    .type(file.getContentType())
+                    .image(ImageUtils.compressImage(file.getBytes())).build());
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 
-	@GetMapping("/{fileName}")
-	public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName){
-		Optional<ImageData> dbImageData = imageRepository.findByName(fileName);
 
-		if(dbImageData.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		byte[] imageData=ImageUtils.decompressImage(dbImageData.get().getImage());
-		return ResponseEntity.status(HttpStatus.OK)
-				.contentType(MediaType.valueOf("image/png"))
-				.body(imageData);
-	}
+    @GetMapping("/{fileName}")
+    @Transactional
+    public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) {
+        Optional<ImageData> dbImageData = imageRepository.findByName(fileName);
 
-	@GetMapping
-	public ResponseEntity<List<ImageDataInfo>> listAllImageIds() {
-		return ResponseEntity.ok(imageRepository.findAllProjectedBy());
-	}
+        if (dbImageData.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        byte[] imageData = ImageUtils.decompressImage(dbImageData.get().getImage());
+        return ResponseEntity.status(HttpStatus.OK)
+                .contentType(MediaType.valueOf("image/png"))
+                .body(imageData);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ImageDataInfo>> listAllImageIds() {
+        return ResponseEntity.ok(imageRepository.findAllProjectedBy());
+    }
 }
