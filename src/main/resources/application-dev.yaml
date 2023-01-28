@@ -17,3 +17,11 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
     show-sql: true
 
+  security:
+    oauth2:
+      # noinspection SpellCheckingInspection
+      resourceserver:
+        jwt:
+          issuer-uri: https://api.asgardeo.io/t/kitrecipeapp/oauth2/token
+
+          jwk-set-uri: https://api.asgardeo.io/t/kitrecipeapp/oauth2/jwks
