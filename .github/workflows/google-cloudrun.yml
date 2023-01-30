@@ -123,7 +123,7 @@ jobs:
             --update-env-vars SERVICE_NAME="Recipes Service" \
             --update-secrets DB_DATABASE=DB_DATABASE:latest \
             --update-secrets DB_USERNAME=DB_USERNAME:1 \
-            --update-secrets DB_PASSWORD=DB_PASSWORD:1 \
+            --update-secrets DB_PASSWORD=DB_PASSWORD:latest \
             --update-secrets DB_CLOUD_SQL_INSTANCE=DB_CLOUD_SQL_INSTANCE:1 \
             --allow-unauthenticated
 
