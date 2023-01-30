@@ -5,6 +5,12 @@ spring:
     import: optional:oauth.yaml
   profiles:
     active: prod
+  security:
+    oauth2:
+      # noinspection SpellCheckingInspection
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken%40system.gserviceaccount.com
 
 springdoc:
   swagger-ui:
