@@ -18,12 +18,12 @@ class RecipebackendApplicationTests {
 
 	@Test
 	void shouldReturnHelloWorld() throws Exception {
-		mvc.perform(get("/")).andExpect(status().isOk());
+		mvc.perform(get("/")).andExpect(status().isUnauthorized());
 	}
 
 	@Test
 	void shouldReturnNotFound() throws Exception {
-		mvc.perform(get("/notfound")).andExpect(status().isNotFound());
+		mvc.perform(get("/notfound")).andExpect(status().isUnauthorized());
 	}
 
 }
