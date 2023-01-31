@@ -2,6 +2,7 @@ package edu.kit.recipe.recipebackend.entities;
 
 
 import edu.kit.recipe.recipebackend.entities.image.ImageData;
+import edu.kit.recipe.recipebackend.entities.tags.Tags;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
@@ -47,6 +48,10 @@ public class Recipe {
     @OneToOne(targetEntity = ImageData.class, cascade = CascadeType.ALL)
     private ImageData imageData;
 
+    @ElementCollection(targetClass = Tags.class)
+    @JoinTable(name = "tblInterests", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Enumerated(EnumType.STRING)
+    private List<Tags> tags;
 
 
     public void addIngredientInformation(IngredientsWithAmount ingredient) {
