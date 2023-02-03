@@ -8,10 +8,8 @@ import org.hibernate.Hibernate;
 import org.hibernate.annotations.GenericGenerator;
 
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+
+import java.util.*;
 
 
 @Entity
@@ -51,7 +49,7 @@ public class Recipe {
     @ElementCollection(targetClass = Tags.class)
     @JoinTable(name = "tblInterests", joinColumns = @JoinColumn(name = "recipe_id"))
     @Enumerated(EnumType.STRING)
-    private List<Tags> tags;
+    private Set<Tags> tags;
 
 
     public void addIngredientInformation(IngredientsWithAmount ingredient) {
