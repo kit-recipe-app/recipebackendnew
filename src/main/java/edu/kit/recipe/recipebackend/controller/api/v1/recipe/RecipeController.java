@@ -46,7 +46,7 @@ public class RecipeController {
         }
         newRecipe.setName(recipe.name());
 
-        if (recipe.description() == null || recipe.description().isEmpty()) {
+        if (recipe.description() == null) {
             logger.warning("Description is null or empty");
             return ResponseEntity.badRequest().build();
         }
