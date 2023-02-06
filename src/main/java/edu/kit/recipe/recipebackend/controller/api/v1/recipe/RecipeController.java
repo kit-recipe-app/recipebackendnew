@@ -28,7 +28,6 @@ public class RecipeController {
     private final IngredientRepository ingredientRepository;
     private final RecipeRepository recipeRepository;
     private final UnitRepository unitRepository;
-    private final IngredientWithAmountRepository ingredientWithAmountRepository;
 
     private final ImageRepository imageRepository;
 
@@ -115,31 +114,7 @@ public class RecipeController {
 
 
 
-    @PostMapping("/{recipeId}/ingredients/{ingredientId}")
-    public ResponseEntity<IngredientsWithAmount> addIngredientToRecipe(@PathVariable String recipeId, @RequestBody AmountInformationDTO amount, @PathVariable String ingredientId) {
-        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
-        if (recipe.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
 
-        Optional<Ingredient> passedIngredient =  ingredientRepository.findById(UUID.fromString(ingredientId));
-        if (passedIngredient.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Optional<Unit> unit = unitRepository.findByName(amount.unit());
-        if (unit.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        IngredientsWithAmount ingredientsWithAmount = new IngredientsWithAmount();
-        ingredientsWithAmount.setAmountInformation(new AmountInformation(amount.amount(), unit.get()));
-        ingredientsWithAmount.setIngredient(passedIngredient.get());
-        recipe.get().getIngredients().add(ingredientsWithAmount);
-
-        ingredientWithAmountRepository.save(ingredientsWithAmount);
-        recipeRepository.save(recipe.get());
-        return ResponseEntity.ok(ingredientsWithAmount);
-    }
 
     @PostMapping("/{recipeId}/image/{imageId}")
     public ResponseEntity<String> addImageToRecipe(@PathVariable String recipeId, @PathVariable String imageId ) {
