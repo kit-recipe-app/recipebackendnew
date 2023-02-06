@@ -4,6 +4,7 @@ package edu.kit.recipe.recipebackend.controller.api.v1.ingredients;
 import edu.kit.recipe.recipebackend.dto.IngredientDTO;
 import edu.kit.recipe.recipebackend.entities.Ingredient;
 import edu.kit.recipe.recipebackend.repository.IngredientRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class IngredientsController {
     }
 
     @PostMapping
-    public ResponseEntity<Ingredient> addIngredient(@RequestBody IngredientDTO ingredient) {
+    public ResponseEntity<Ingredient> addIngredient(@RequestBody @Valid IngredientDTO ingredient) {
         if (ingredient.name() == null || ingredient.name().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }

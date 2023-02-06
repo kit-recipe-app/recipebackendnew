@@ -1,4 +1,7 @@
 package edu.kit.recipe.recipebackend.dto;
 
-public record CookingInstructionDTO(String instruction) {
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+public record CookingInstructionDTO(@NotNull @NotEmpty String instruction) {
 }

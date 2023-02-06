@@ -1,10 +1,10 @@
 package edu.kit.recipe.recipebackend.controller.api.v1.units;
 
 
-
 import edu.kit.recipe.recipebackend.dto.UnitDTO;
 import edu.kit.recipe.recipebackend.entities.units.Unit;
 import edu.kit.recipe.recipebackend.repository.UnitRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +26,7 @@ public class UnitController {
 
 
     @PostMapping
-    public ResponseEntity<Unit> addUnit(@RequestBody UnitDTO unit) {
+    public ResponseEntity<Unit> addUnit(@RequestBody @Valid UnitDTO unit) {
         if (unit.name() == null || unit.name().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
