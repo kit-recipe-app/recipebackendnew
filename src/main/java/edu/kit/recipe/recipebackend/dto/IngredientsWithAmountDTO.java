@@ -1,7 +1,7 @@
 package edu.kit.recipe.recipebackend.dto;
 
 
+import jakarta.validation.constraints.NotNull;
 
-
-public record IngredientsWithAmountDTO(IngredientDTO ingredient, AmountInformationDTO amount) {
+public record IngredientsWithAmountDTO(@NotNull IngredientDTO ingredient,@NotNull AmountInformationDTO amount) {
 }

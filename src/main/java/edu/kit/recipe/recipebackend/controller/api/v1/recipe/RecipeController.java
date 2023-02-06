@@ -1,12 +1,12 @@
 package edu.kit.recipe.recipebackend.controller.api.v1.recipe;
 
 
-
-import edu.kit.recipe.recipebackend.dto.*;
-import edu.kit.recipe.recipebackend.entities.*;
-import edu.kit.recipe.recipebackend.entities.image.ImageData;
-import edu.kit.recipe.recipebackend.entities.units.Unit;
-import edu.kit.recipe.recipebackend.repository.*;
+import edu.kit.recipe.recipebackend.dto.RecipeDTO;
+import edu.kit.recipe.recipebackend.entities.Recipe;
+import edu.kit.recipe.recipebackend.repository.RecipeInfo;
+import edu.kit.recipe.recipebackend.repository.RecipeRepository;
+import edu.kit.recipe.recipebackend.service.RecipeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 
 @Controller
@@ -24,112 +23,28 @@ import java.util.logging.Logger;
 @RequiredArgsConstructor
 public class RecipeController {
 
-    private final Logger logger = Logger.getLogger(RecipeController.class.getName());
-    private final IngredientRepository ingredientRepository;
     private final RecipeRepository recipeRepository;
-    private final UnitRepository unitRepository;
 
-    private final ImageRepository imageRepository;
-
+    private final RecipeService recipeService;
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Recipe> deleteRecipe(@PathVariable String id) {
-        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(id));
-        if (recipe.isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
-        recipe.get().getIngredients().forEach(ingredient -> ingredient.setIngredient(null));
-        recipeRepository.delete(recipe.get());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> deleteRecipe(@PathVariable String id) {
+        return ResponseEntity.ok().body(recipeService.deleteRecipe(id));
     }
-
-
-
-
 
     @PostMapping
-    public ResponseEntity<Recipe> addRecipe(@RequestBody RecipeDTO recipe) {
-
-        if (recipe.name() == null || recipe.name().isEmpty()) {
-            logger.warning("Name is null or empty");
-            return ResponseEntity.badRequest().build();
-        }
-        if (recipe.description() == null) {
-            logger.warning("Description is null or empty");
-            return ResponseEntity.badRequest().build();
-        }
-        if (recipe.ingredients() == null || recipe.ingredients().isEmpty()) {
-            logger.warning("Ingredients are null or empty");
-            return ResponseEntity.badRequest().build();
-        }
-        if (recipe.cookingInstructions() == null || recipe.cookingInstructions().isEmpty()) {
-            logger.warning("Cooking instructions are null or empty");
-            return ResponseEntity.badRequest().build();
-        }
-
-        Recipe newRecipe = new Recipe();
-        newRecipe.setName(recipe.name());
-        newRecipe.setDescription(recipe.description());
-        for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
-            Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
-            if (found.isEmpty()) {
-                logger.warning("Ingredient not found");
-                return ResponseEntity.badRequest().build();
-            }
-            Optional<Unit> unit = unitRepository.findByNameContainsIgnoreCase(ingredientInformation.amount().unit());
-            if (unit.isEmpty()) {
-                logger.warning("Unit not found");
-                return ResponseEntity.badRequest().build();
-            }
-            if (ingredientInformation.amount().amount()<= 0) {
-                logger.warning("Amount is not valid");
-                return ResponseEntity.badRequest().build();
-            }
-            IngredientsWithAmount newIngredient = new IngredientsWithAmount();
-            newIngredient.setIngredient(found.get());
-            newIngredient.setAmountInformation(new AmountInformation(ingredientInformation.amount().amount(), unit.get()));
-            newRecipe.addIngredientInformation(newIngredient);
-        }
-
-        for (CookingInstructionDTO cookingInstruction : recipe.cookingInstructions()) {
-            if (cookingInstruction.instruction() == null || cookingInstruction.instruction().isEmpty()) {
-                logger.warning("Instruction is null or empty");
-                return ResponseEntity.badRequest().build();
-            }
-            CookingInstruction newInstruction = new CookingInstruction();
-            newInstruction.setInstruction(cookingInstruction.instruction());
-            newRecipe.addCookingInstruction(newInstruction);
-        }
-        return ResponseEntity.ok(recipeRepository.save(newRecipe));
+    public ResponseEntity<String> addRecipe(@RequestBody @Valid RecipeDTO recipe) {
+        return ResponseEntity.ok(recipeService.addRecipe(recipe));
     }
-
-
-
 
     @GetMapping
     public ResponseEntity<List<RecipeInfo>> getRecipeNameWithID() {
         return ResponseEntity.ok(recipeRepository.findAllProjectedBy());
     }
 
-
-
-
-
-
     @PostMapping("/{recipeId}/image/{imageId}")
     public ResponseEntity<String> addImageToRecipe(@PathVariable String recipeId, @PathVariable String imageId ) {
-        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
-        if (recipe.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Optional<ImageData> image = imageRepository.findById(UUID.fromString(imageId));
-
-        if (image.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        recipe.get().setImageData(image.get());
-        recipeRepository.save(recipe.get());
-        return ResponseEntity.ok("Image added to recipe");
+        return ResponseEntity.ok(recipeService.addImageToRecipe(recipeId, imageId));
     }
 
     @GetMapping("/{recipeId}/image")
