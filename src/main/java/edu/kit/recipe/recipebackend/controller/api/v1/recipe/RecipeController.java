@@ -28,7 +28,6 @@ public class RecipeController {
     private final IngredientRepository ingredientRepository;
     private final RecipeRepository recipeRepository;
     private final UnitRepository unitRepository;
-    private final IngredientWithAmountRepository ingredientWithAmountRepository;
 
     private final ImageRepository imageRepository;
 
@@ -39,6 +38,7 @@ public class RecipeController {
         if (recipe.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
+        recipe.get().getIngredients().forEach(ingredient -> ingredient.setIngredient(null));
         recipeRepository.delete(recipe.get());
         return ResponseEntity.ok().build();
     }
@@ -49,23 +49,27 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<Recipe> addRecipe(@RequestBody RecipeDTO recipe) {
-        Recipe newRecipe = new Recipe();
+
         if (recipe.name() == null || recipe.name().isEmpty()) {
             logger.warning("Name is null or empty");
             return ResponseEntity.badRequest().build();
         }
-        newRecipe.setName(recipe.name());
-
         if (recipe.description() == null) {
             logger.warning("Description is null or empty");
             return ResponseEntity.badRequest().build();
         }
-        newRecipe.setDescription(recipe.description());
-
         if (recipe.ingredients() == null || recipe.ingredients().isEmpty()) {
             logger.warning("Ingredients are null or empty");
             return ResponseEntity.badRequest().build();
         }
+        if (recipe.cookingInstructions() == null || recipe.cookingInstructions().isEmpty()) {
+            logger.warning("Cooking instructions are null or empty");
+            return ResponseEntity.badRequest().build();
+        }
+
+        Recipe newRecipe = new Recipe();
+        newRecipe.setName(recipe.name());
+        newRecipe.setDescription(recipe.description());
         for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
             Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
             if (found.isEmpty()) {
@@ -110,31 +114,7 @@ public class RecipeController {
 
 
 
-    @PostMapping("/{recipeId}/ingredients/{ingredientId}")
-    public ResponseEntity<IngredientsWithAmount> addIngredientToRecipe(@PathVariable String recipeId, @RequestBody AmountInformationDTO amount, @PathVariable String ingredientId) {
-        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
-        if (recipe.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
 
-        Optional<Ingredient> passedIngredient =  ingredientRepository.findById(UUID.fromString(ingredientId));
-        if (passedIngredient.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-        Optional<Unit> unit = unitRepository.findByName(amount.unit());
-        if (unit.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
-
-        IngredientsWithAmount ingredientsWithAmount = new IngredientsWithAmount();
-        ingredientsWithAmount.setAmountInformation(new AmountInformation(amount.amount(), unit.get()));
-        ingredientsWithAmount.setIngredient(passedIngredient.get());
-        recipe.get().getIngredients().add(ingredientsWithAmount);
-
-        ingredientWithAmountRepository.save(ingredientsWithAmount);
-        recipeRepository.save(recipe.get());
-        return ResponseEntity.ok(ingredientsWithAmount);
-    }
 
     @PostMapping("/{recipeId}/image/{imageId}")
     public ResponseEntity<String> addImageToRecipe(@PathVariable String recipeId, @PathVariable String imageId ) {

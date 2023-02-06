@@ -32,7 +32,7 @@ public class IngredientsWithAmount {
     private AmountInformation amountInformation;
 
 
-    @OneToOne(targetEntity = Ingredient.class, cascade = CascadeType.ALL)
+    @OneToOne(targetEntity = Ingredient.class)
     private Ingredient ingredient;
 
 
