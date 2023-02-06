@@ -39,6 +39,7 @@ public class RecipeController {
         if (recipe.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
+        recipe.get().getIngredients().forEach(ingredient -> ingredient.setIngredient(null));
         recipeRepository.delete(recipe.get());
         return ResponseEntity.ok().build();
     }
@@ -49,23 +50,27 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<Recipe> addRecipe(@RequestBody RecipeDTO recipe) {
-        Recipe newRecipe = new Recipe();
+
         if (recipe.name() == null || recipe.name().isEmpty()) {
             logger.warning("Name is null or empty");
             return ResponseEntity.badRequest().build();
         }
-        newRecipe.setName(recipe.name());
-
         if (recipe.description() == null) {
             logger.warning("Description is null or empty");
             return ResponseEntity.badRequest().build();
         }
-        newRecipe.setDescription(recipe.description());
-
         if (recipe.ingredients() == null || recipe.ingredients().isEmpty()) {
             logger.warning("Ingredients are null or empty");
             return ResponseEntity.badRequest().build();
         }
+        if (recipe.cookingInstructions() == null || recipe.cookingInstructions().isEmpty()) {
+            logger.warning("Cooking instructions are null or empty");
+            return ResponseEntity.badRequest().build();
+        }
+
+        Recipe newRecipe = new Recipe();
+        newRecipe.setName(recipe.name());
+        newRecipe.setDescription(recipe.description());
         for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
             Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
             if (found.isEmpty()) {
