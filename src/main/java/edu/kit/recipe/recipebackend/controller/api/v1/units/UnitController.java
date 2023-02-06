@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/units")
@@ -43,5 +44,15 @@ public class UnitController {
     @GetMapping
     public ResponseEntity<List<Unit>> getUnits() {
         return ResponseEntity.ok(unitRepository.findAll());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUnit(@PathVariable String id) {
+        Optional<Unit> unit = unitRepository.findById(UUID.fromString(id));
+        if (unit.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        unitRepository.delete(unit.get());
+        return ResponseEntity.ok("Deleted");
     }
 }
