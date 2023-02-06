@@ -33,6 +33,16 @@ public class RecipeController {
     private final ImageRepository imageRepository;
 
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Recipe> deleteRecipe(@PathVariable String id) {
+        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(id));
+        if (recipe.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+        recipeRepository.delete(recipe.get());
+        return ResponseEntity.ok().build();
+    }
+
 
 
 
@@ -91,13 +101,6 @@ public class RecipeController {
 
 
 
-
-    @GetMapping("/{id}/ingredients")
-    public ResponseEntity<List<IngredientsWithAmount>> getIngredientsForRecipe(@PathVariable String id) {
-        Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(id));
-        return recipe.map(value -> ResponseEntity.ok(value.getIngredients()))
-                .orElseGet(() -> ResponseEntity.badRequest().build());
-    }
 
     @GetMapping
     public ResponseEntity<List<RecipeInfo>> getRecipeNameWithID() {
