@@ -13,6 +13,9 @@ public class BaseController {
 
     @GetMapping
     public ResponseEntity<String> checkAlive(JwtAuthenticationToken authentication) {
+        if (authentication.getTokenAttributes().get("email") == null) {
+            return ResponseEntity.ok("Hello World!");
+        }
         return ResponseEntity.ok("Hello " + authentication.getTokenAttributes().get("email") + "!");
     }
 }
