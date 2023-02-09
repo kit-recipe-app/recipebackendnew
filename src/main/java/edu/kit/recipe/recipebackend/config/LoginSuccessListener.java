@@ -24,7 +24,9 @@ public class LoginSuccessListener implements ApplicationListener<AuthenticationS
 
     private void createNewUserEntryInDB(String email) {
         if (customerRepository.findByEmail(email).isEmpty()) {
-            customerRepository.save(Customer.builder().email(email).build());
+            Customer customer = new Customer();
+            customer.setEmail(email);
+            customerRepository.save(customer);
         }
     }
 }
