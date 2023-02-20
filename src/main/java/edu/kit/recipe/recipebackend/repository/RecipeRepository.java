@@ -8,6 +8,6 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RecipeRepository extends JpaRepository<Recipe, UUID> {
-    List<RecipeInfo>  findAllProjectedBy();
+    List<RecipeInfo> findByIsPublicTrue();
 }
 

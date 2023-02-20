@@ -26,8 +26,9 @@ public class RecipeService {
     private final IngredientRepository ingredientRepository;
     private final RecipeRepository recipeRepository;
     private final UnitRepository unitRepository;
-
     private final ImageRepository imageRepository;
+
+    private final CustomerService customerService;
 
 
     public String deleteRecipe(String id) {
@@ -75,7 +76,9 @@ public class RecipeService {
             newInstruction.setInstruction(cookingInstruction.instruction());
             newRecipe.addCookingInstruction(newInstruction);
         }
-        recipeRepository.save(newRecipe);
+        newRecipe.setPublic(false);
+        var recipeStored = recipeRepository.save(newRecipe);
+        customerService.addRecipe(recipeStored);
         return "Recipe added";
     }
 

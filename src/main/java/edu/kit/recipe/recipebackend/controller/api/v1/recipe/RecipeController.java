@@ -41,7 +41,7 @@ public class RecipeController {
 
     @GetMapping
     public ResponseEntity<List<RecipeInfo>> getRecipeNameWithID() {
-        return ResponseEntity.ok(recipeRepository.findAllProjectedBy());
+        return ResponseEntity.ok(recipeRepository.findByIsPublicTrue());
     }
 
     @PostMapping("/{recipeId}/image/{imageId}")

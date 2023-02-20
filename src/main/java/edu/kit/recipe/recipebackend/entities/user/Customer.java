@@ -6,9 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.Hibernate;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
@@ -25,6 +23,8 @@ public class Customer {
     @Column(unique = true)
     private String email;
 
+    private String name = "";
+
     @OneToMany(targetEntity = Recipe.class, cascade = CascadeType.ALL)
     @ToString.Exclude
     private List<Recipe> recipe;
@@ -40,5 +40,12 @@ public class Customer {
     @Override
     public int hashCode() {
         return getClass().hashCode();
+    }
+
+    public List<Recipe> getRecipes() {
+        if (recipe == null) {
+            recipe = new ArrayList<>();
+        }
+        return recipe;
     }
 }
