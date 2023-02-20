@@ -29,7 +29,9 @@ public class Recipe {
     private UUID id;
     private String name;
 
+
     private Boolean isPublic = true;
+
 
 
     private String description;
