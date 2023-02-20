@@ -76,7 +76,11 @@ public class RecipeService {
             newInstruction.setInstruction(cookingInstruction.instruction());
             newRecipe.addCookingInstruction(newInstruction);
         }
-        newRecipe.setPublic(false);
+        if (recipe.isPublic() != null) {
+            newRecipe.setPublic(recipe.isPublic());
+        } else {
+            newRecipe.setPublic(false);
+        }
         var recipeStored = recipeRepository.save(newRecipe);
         customerService.addRecipe(recipeStored);
         return "Recipe added";
