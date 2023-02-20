@@ -8,5 +8,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
-public record RecipeDTO(@NotNull @NotEmpty String name, @NotNull String description, @NotNull @NotEmpty List<@Valid CookingInstructionDTO> cookingInstructions, @NotNull @NotEmpty List<@Valid IngredientsWithAmountDTO> ingredients) { }
+public record RecipeDTO(@NotNull @NotEmpty String name,
+                        @NotNull String description,
+
+                        Boolean isPublic,
+                        @NotNull @NotEmpty List<@Valid CookingInstructionDTO> cookingInstructions,
+                        @NotNull @NotEmpty List<@Valid IngredientsWithAmountDTO> ingredients) { }
 
