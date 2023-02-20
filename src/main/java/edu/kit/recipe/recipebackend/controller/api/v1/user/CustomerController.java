@@ -2,16 +2,13 @@ package edu.kit.recipe.recipebackend.controller.api.v1.user;
 
 
 import edu.kit.recipe.recipebackend.dto.CustomerDTO;
+import edu.kit.recipe.recipebackend.dto.NameDTO;
 import edu.kit.recipe.recipebackend.entities.user.Customer;
 import edu.kit.recipe.recipebackend.repository.RecipeInfo;
 import edu.kit.recipe.recipebackend.service.CustomerService;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -38,7 +35,7 @@ public class CustomerController {
 
 
     @PutMapping("/name")
-    public void changeCustomerName(@NotNull @NotEmpty String name) {
-        customerService.changeCustomerName(name);
+    public void changeCustomerName(@RequestBody @Valid NameDTO name) {
+        customerService.changeCustomerName(name.name());
     }
 }
