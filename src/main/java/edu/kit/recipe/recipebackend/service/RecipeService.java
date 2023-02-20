@@ -77,9 +77,9 @@ public class RecipeService {
             newRecipe.addCookingInstruction(newInstruction);
         }
         if (recipe.isPublic() != null) {
-            newRecipe.setPublic(recipe.isPublic());
+            newRecipe.setIsPublic(recipe.isPublic());
         } else {
-            newRecipe.setPublic(false);
+            newRecipe.setIsPublic(false);
         }
         var recipeStored = recipeRepository.save(newRecipe);
         customerService.addRecipe(recipeStored);
