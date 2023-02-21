@@ -3,7 +3,9 @@ package edu.kit.recipe.recipebackend.controller.api.v1.ingredients;
 
 import edu.kit.recipe.recipebackend.dto.IngredientDTO;
 import edu.kit.recipe.recipebackend.entities.Ingredient;
+import edu.kit.recipe.recipebackend.entities.tags.Tag;
 import edu.kit.recipe.recipebackend.repository.IngredientRepository;
+import edu.kit.recipe.recipebackend.repository.tag.TagRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class IngredientsController {
     private final IngredientRepository ingredientRepository;
+    private final TagRepository tagRepository;
 
     @GetMapping
     public ResponseEntity<List<Ingredient>> getIngredients() {
@@ -27,17 +30,16 @@ public class IngredientsController {
 
     @PostMapping
     public ResponseEntity<Ingredient> addIngredient(@RequestBody @Valid IngredientDTO ingredient) {
-        if (ingredient.name() == null || ingredient.name().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
         Ingredient newIngredient = new Ingredient();
         newIngredient.setName(ingredient.name());
+        Optional<Tag> tag = tagRepository.findByNameIgnoreCase(ingredient.tag().name());
         Optional<Ingredient> found =  ingredientRepository.findByNameContainsIgnoreCase(
                 ingredient.name()
             );
-        if (found.isPresent()) {
+        if (found.isPresent() || tag.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         }
+        newIngredient.setTag(tag.get());
         return ResponseEntity.ok(ingredientRepository.save(newIngredient));
     }
 
