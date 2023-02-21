@@ -1,15 +1,13 @@
 package edu.kit.recipe.recipebackend.entities;
 
 
+import edu.kit.recipe.recipebackend.entities.tags.Tag;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import java.util.UUID;
 
 
@@ -28,5 +26,8 @@ public class Ingredient {
     private UUID id;
 
     private String name;
+
+    @OneToOne(targetEntity = Tag.class)
+    private Tag tag;
 
 }
