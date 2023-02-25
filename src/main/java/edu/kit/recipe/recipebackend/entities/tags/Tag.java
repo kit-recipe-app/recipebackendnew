@@ -16,6 +16,7 @@ import java.util.UUID;
 @Setter
 @ToString
 @RequiredArgsConstructor
+@AllArgsConstructor
 public class Tag {
 
 

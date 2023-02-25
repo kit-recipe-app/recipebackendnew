@@ -21,13 +21,13 @@ public class CustomerService {
 
 
 
-    public Customer getCustomerInformation() {
-        return customerRepository.findByEmail(getEmail()).get(0);
+    public Customer getCustomerInformation(String email) {
+        return customerRepository.findByEmail(email).get(0);
     }
 
 
-    public void changeCustomerName(@NotNull String name) {
-        Customer customer = getCustomerInformation();
+    public void changeCustomerName(@NotNull String name, String email) {
+        Customer customer = getCustomerInformation(email);
         customer.setName(name);
         customerRepository.save(customer);
     }
@@ -35,7 +35,7 @@ public class CustomerService {
 
 
     @SneakyThrows
-    private String getEmail() {
+    public String getEmail() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
             return jwtAuthenticationToken.getTokenAttributes().get("email").toString();
@@ -44,13 +44,13 @@ public class CustomerService {
     }
 
 
-    public void addRecipe(Recipe recipeStored) {
-        Customer customer = getCustomerInformation();
+    public void addRecipe(Recipe recipeStored, String email) {
+        Customer customer = getCustomerInformation(email);
         customer.getRecipes().add(recipeStored);
         customerRepository.save(customer);
     }
 
-    public List<RecipeInfo> getRecipes() {
-        return customerRepository.getByEmail(getEmail()).getRecipe();
+    public List<RecipeInfo> getRecipes(String email) {
+        return customerRepository.getByEmail(email).getRecipe();
     }
 }

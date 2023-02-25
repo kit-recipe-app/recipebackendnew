@@ -19,3 +19,11 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  security:
+    oauth2:
+      # noinspection SpellCheckingInspection
+      resourceserver:
+        jwt:
+          jwk-set-uri: https://www.googleapis.com/service_accounts/v1/jwk/securetoken%40system.gserviceaccount.com
+          issuer-uri: https://securetoken.google.com/kit-recipe-app
