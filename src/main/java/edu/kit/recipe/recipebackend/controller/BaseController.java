@@ -18,4 +18,9 @@ public class BaseController {
         }
         return ResponseEntity.ok("Hello " + authentication.getTokenAttributes().get("email") + "!");
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("Hello World!");
+    }
 }
