@@ -82,7 +82,7 @@ public class RecipeService {
             newRecipe.setIsPublic(false);
         }
         var recipeStored = recipeRepository.save(newRecipe);
-        customerService.addRecipe(recipeStored);
+        customerService.addRecipe(recipeStored, customerService.getEmail());
         return "Recipe added";
     }
 

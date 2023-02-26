@@ -24,18 +24,18 @@ public class CustomerController {
 
     @GetMapping()
     public CustomerDTO getCustomerInformation() {
-        Customer customer = customerService.getCustomerInformation();
+        Customer customer = customerService.getCustomerInformation(customerService.getEmail());
         return new CustomerDTO(customer.getName(), customer.getEmail());
     }
 
     @GetMapping("/recipes")
     public List<RecipeInfo> getCustomerRecipes() {
-        return customerService.getRecipes();
+        return customerService.getRecipes(customerService.getEmail());
     }
 
 
     @PutMapping("/name")
     public void changeCustomerName(@RequestBody @Valid NameDTO name) {
-        customerService.changeCustomerName(name.name());
+        customerService.changeCustomerName(name.name(), customerService.getEmail());
     }
 }

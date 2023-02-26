@@ -21,9 +21,6 @@
     <option name="MAIN_CLASS_NAME" value="edu.kit.recipe.recipebackend.RecipebackendApplicationTests" />
     <option name="METHOD_NAME" value="" />
     <option name="TEST_OBJECT" value="class" />
-    <envs>
-      <env name="--spring.profiles.active" value="dev" />
-    </envs>
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
