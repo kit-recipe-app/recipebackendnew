@@ -8,6 +8,10 @@ import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 
+/**
+ * DTO for the recipe
+ * @author Johannes Stephan
+ */
 public record RecipeDTO(@NotNull @NotEmpty String name,
                         @NotNull String description,
 
