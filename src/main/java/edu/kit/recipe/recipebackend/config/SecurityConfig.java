@@ -9,13 +9,15 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
 
+
+/**
+ * Custom Security Configuration for the application.
+ * The access of the swagger-ui is allowed for everyone.
+ * @author Johannes Stephan
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-
-
-
-
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {

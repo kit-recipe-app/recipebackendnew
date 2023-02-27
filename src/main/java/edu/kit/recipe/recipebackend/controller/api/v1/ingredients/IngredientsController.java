@@ -16,6 +16,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Controller for the ingredients
+ * @author Johannes Stephan
+ */
 @RestController
 @RequestMapping("/api/v1/ingredients")
 @RequiredArgsConstructor
@@ -23,11 +27,21 @@ public class IngredientsController {
     private final IngredientRepository ingredientRepository;
     private final TagRepository tagRepository;
 
+
+    /**
+     * Gets all ingredients that are in the database
+     * @return a list of all ingredients
+     */
     @GetMapping
     public ResponseEntity<List<Ingredient>> getIngredients() {
         return ResponseEntity.ok(ingredientRepository.findAll());
     }
 
+    /**
+     * Adds a new ingredient to the database
+     * @param ingredient the ingredient to add
+     * @return the added ingredient with the corresponding UUID
+     */
     @PostMapping
     public ResponseEntity<Ingredient> addIngredient(@RequestBody @Valid IngredientDTO ingredient) {
         Ingredient newIngredient = new Ingredient();
@@ -43,7 +57,12 @@ public class IngredientsController {
         return ResponseEntity.ok(ingredientRepository.save(newIngredient));
     }
 
-
+    /**
+     * Deletes an ingredient from the database
+     * Requirement is that the id is not used by any recipe
+     * @param id the id of the ingredient to delete
+     * @return a string that says that the ingredient was deleted
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteIngredient(@PathVariable String id) {
         Optional<Ingredient> ingredient = ingredientRepository.findById(UUID.fromString(id));

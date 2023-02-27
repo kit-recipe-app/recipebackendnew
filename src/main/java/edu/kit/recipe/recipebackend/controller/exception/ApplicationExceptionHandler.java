@@ -10,10 +10,18 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Exception handler for the application
+ */
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
 
+    /**
+     * Handles invalid method arguments
+     * @param exception the exception
+     * @return a map with the field name and the error message with a status code 400
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleInvalidMethodArgument(MethodArgumentNotValidException exception) {
@@ -22,6 +30,11 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
+    /**
+     * Handles illegal arguments
+     * @param exception the exception
+     * @return a map with the error message with a status code 400
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
     public Map<String, String> handleIllegalArgumentException(IllegalArgumentException exception) {
