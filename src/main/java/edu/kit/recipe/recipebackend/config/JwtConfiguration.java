@@ -12,12 +12,21 @@ import java.util.List;
 
 import static org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames.AUD;
 
+
+/**
+ * Custom JWT configuration for securing the application and to validate the audience.
+ * @author Johannes Stephan
+ */
 @Configuration
 public class JwtConfiguration {
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuerUri;
 
+    /**
+     * Custom Oauth2 Validator for the audience.
+     * @return the new JwtClaimValidator
+     */
     OAuth2TokenValidator<Jwt> audienceValidator() {
         return new JwtClaimValidator<List<String>>(AUD, aud -> aud.contains("kit-recipe-app"));
     }

@@ -9,6 +9,10 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Component;
 
 
+/**
+ * This class is used to create a new user entry in the database if the user is not already registered.
+ * @author Johannes Stephan
+ */
 @Component
 @RequiredArgsConstructor
 public class LoginSuccessListener implements ApplicationListener<AuthenticationSuccessEvent> {

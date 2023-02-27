@@ -17,6 +17,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Controller for uploading and downloading images that are linked to recipes and profile pictures.
+ * @author Johannes Stephan
+ */
 @RestController
 @RequestMapping("/api/v1/images")
 @RequiredArgsConstructor
@@ -25,6 +29,11 @@ public class ImageController {
     private final ImageRepository imageRepository;
 
 
+    /**
+     * Uploads an image to the database.
+     * @param file the image to upload
+     * @return 200 if the image was uploaded successfully, 400 if the image was empty or null, 500 if an error occurred
+     */
     @PostMapping
     public ResponseEntity<String> uploadImage(@RequestParam("image") MultipartFile file) {
         if (file == null || file.isEmpty() || file.getOriginalFilename() == null || file.getOriginalFilename().isEmpty()) {
