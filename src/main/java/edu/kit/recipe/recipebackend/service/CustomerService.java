@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +53,11 @@ public class CustomerService {
 
     public List<RecipeInfo> getRecipes(String email) {
         return customerRepository.getByEmail(email).getRecipe();
+    }
+
+    public void deleteRecipe(String email, UUID id) {
+        Customer customer = getCustomerInformation(email);
+        customer.getRecipes().removeIf(recipe -> recipe.getId().equals(id));
+        customerRepository.save(customer);
     }
 }
