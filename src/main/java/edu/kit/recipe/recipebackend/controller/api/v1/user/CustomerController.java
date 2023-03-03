@@ -8,9 +8,11 @@ import edu.kit.recipe.recipebackend.repository.RecipeInfo;
 import edu.kit.recipe.recipebackend.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Controller for the customer
@@ -41,6 +43,12 @@ public class CustomerController {
     @GetMapping("/recipes")
     public List<RecipeInfo> getCustomerRecipes() {
         return customerService.getRecipes(customerService.getEmail());
+    }
+
+    @DeleteMapping("/recipes/{id}")
+    public ResponseEntity<String> deleteRecipe(@PathVariable String id) {
+        customerService.deleteRecipe(customerService.getEmail(), UUID.fromString(id));
+        return ResponseEntity.ok("Recipe deleted");
     }
 
     /**
