@@ -78,13 +78,9 @@ public class CustomerService {
             throw new IllegalArgumentException("Recipe not found");
         }
         var newRecipe = recipeMapper.mapRecipeDTOToRecipe(recipe);
-
         storedRecipe.get().setName(newRecipe.getName());
         storedRecipe.get().setDescription(newRecipe.getDescription());
         storedRecipe.get().setIsPublic(newRecipe.getIsPublic());
-        storedRecipe.get().setIngredients(newRecipe.getIngredients());
-        storedRecipe.get().setCookingInstructions(newRecipe.getCookingInstructions());
         recipeRepository.save(storedRecipe.get());
-
     }
 }
