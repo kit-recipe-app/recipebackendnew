@@ -72,7 +72,9 @@ public class CustomerService {
         if (storedRecipe.isEmpty()) {
             throw new IllegalArgumentException("Recipe not found");
         }
-        if (!storedRecipe.get().getCustomer().getEmail().equals(email)) {
+
+        Customer customerInformation = getCustomerInformation(email);
+        if (!customerInformation.getRecipes().contains(storedRecipe.get())) {
             throw new IllegalArgumentException("Recipe not found");
         }
         var newRecipe = recipeMapper.mapRecipeDTOToRecipe(recipe);
