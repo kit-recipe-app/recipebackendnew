@@ -5,6 +5,7 @@ import edu.kit.recipe.recipebackend.entities.Ingredient;
 import edu.kit.recipe.recipebackend.entities.Recipe;
 import edu.kit.recipe.recipebackend.entities.image.ImageData;
 import edu.kit.recipe.recipebackend.entities.units.Unit;
+import edu.kit.recipe.recipebackend.mapper.RecipeMapper;
 import edu.kit.recipe.recipebackend.repository.ImageRepository;
 import edu.kit.recipe.recipebackend.repository.IngredientRepository;
 import edu.kit.recipe.recipebackend.repository.RecipeRepository;
@@ -38,6 +39,7 @@ class RecipeServiceTest {
     private CustomerService customerService;
 
 
+
     @Mock
     private IngredientRepository ingredientRepository;
 
@@ -50,11 +52,11 @@ class RecipeServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.recipeService = new RecipeService(ingredientRepository,
+        this.recipeService = new RecipeService(
                 recipeRepository,
-                unitRepository,
                 imageRepository,
-                customerService);
+                customerService,
+                new RecipeMapper(recipeRepository, ingredientRepository, unitRepository));
     }
 
 
@@ -77,7 +79,6 @@ class RecipeServiceTest {
         ingredient.setName("Banane");
         Unit unit = new Unit();
         unit.setName("Stück");
-
         when(ingredientRepository.findByNameContainsIgnoreCase("Banane")).thenReturn(Optional.of(ingredient));
         when(unitRepository.findByNameContainsIgnoreCase("Stück")).thenReturn(java.util.Optional.of(unit));
         when(recipeRepository.save(any(Recipe.class))).thenReturn(new Recipe());

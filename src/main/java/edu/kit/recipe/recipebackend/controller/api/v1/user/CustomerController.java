@@ -3,6 +3,7 @@ package edu.kit.recipe.recipebackend.controller.api.v1.user;
 
 import edu.kit.recipe.recipebackend.dto.CustomerDTO;
 import edu.kit.recipe.recipebackend.dto.NameDTO;
+import edu.kit.recipe.recipebackend.dto.RecipeDTO;
 import edu.kit.recipe.recipebackend.entities.user.Customer;
 import edu.kit.recipe.recipebackend.repository.RecipeInfo;
 import edu.kit.recipe.recipebackend.service.CustomerService;
@@ -49,6 +50,12 @@ public class CustomerController {
     public ResponseEntity<String> deleteRecipe(@PathVariable String id) {
         customerService.deleteRecipe(customerService.getEmail(), UUID.fromString(id));
         return ResponseEntity.ok("Recipe deleted");
+    }
+
+    @PutMapping("/recipes/{id}")
+    public ResponseEntity<String> updateRecipe(@RequestBody @Valid RecipeDTO recipe, @PathVariable String id) {
+        customerService.updateRecipe(customerService.getEmail(), UUID.fromString(id), recipe);
+        return ResponseEntity.ok("Recipe updated");
     }
 
     /**

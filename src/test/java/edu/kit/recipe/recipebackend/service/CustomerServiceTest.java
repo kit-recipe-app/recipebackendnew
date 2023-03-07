@@ -2,7 +2,9 @@ package edu.kit.recipe.recipebackend.service;
 
 import edu.kit.recipe.recipebackend.entities.Recipe;
 import edu.kit.recipe.recipebackend.entities.user.Customer;
+import edu.kit.recipe.recipebackend.mapper.RecipeMapper;
 import edu.kit.recipe.recipebackend.repository.CustomerRepository;
+import edu.kit.recipe.recipebackend.repository.RecipeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,12 +32,18 @@ class CustomerServiceTest {
     @Mock
     private CustomerRepository customerRepository;
 
+    @Mock
+    private RecipeRepository recipeRepository;
+
+    @Mock
+    private RecipeMapper recipeMapper;
+
     private CustomerService customerService;
 
 
     @BeforeEach
     void setUp() {
-        customerService = new CustomerService(customerRepository);
+        customerService = new CustomerService(customerRepository, recipeRepository, recipeMapper);
     }
 
     @Test
