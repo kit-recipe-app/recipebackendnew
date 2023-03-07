@@ -1,34 +1,28 @@
 package edu.kit.recipe.recipebackend.service;
 
 
-import edu.kit.recipe.recipebackend.dto.CookingInstructionDTO;
-import edu.kit.recipe.recipebackend.dto.IngredientsWithAmountDTO;
 import edu.kit.recipe.recipebackend.dto.RecipeDTO;
-import edu.kit.recipe.recipebackend.entities.*;
+import edu.kit.recipe.recipebackend.entities.Recipe;
 import edu.kit.recipe.recipebackend.entities.image.ImageData;
-import edu.kit.recipe.recipebackend.entities.units.Unit;
+import edu.kit.recipe.recipebackend.mapper.RecipeMapper;
 import edu.kit.recipe.recipebackend.repository.ImageRepository;
-import edu.kit.recipe.recipebackend.repository.IngredientRepository;
 import edu.kit.recipe.recipebackend.repository.RecipeRepository;
-import edu.kit.recipe.recipebackend.repository.UnitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
 
-    private final Logger logger = Logger.getLogger(RecipeService.class.getName());
-    private final IngredientRepository ingredientRepository;
     private final RecipeRepository recipeRepository;
-    private final UnitRepository unitRepository;
     private final ImageRepository imageRepository;
 
     private final CustomerService customerService;
+
+    private final RecipeMapper recipeMapper;
 
 
     public String deleteRecipe(String id) {
@@ -42,46 +36,7 @@ public class RecipeService {
     }
 
     public String addRecipe(RecipeDTO recipe) {
-
-        Recipe newRecipe = new Recipe();
-        newRecipe.setName(recipe.name());
-        newRecipe.setDescription(recipe.description());
-        for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
-            Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
-            if (found.isEmpty()) {
-                logger.warning("Ingredient not found");
-                throw new IllegalArgumentException("Ingredient not found");
-            }
-            Optional<Unit> unit = unitRepository.findByNameContainsIgnoreCase(ingredientInformation.amount().unit());
-            if (unit.isEmpty()) {
-                logger.warning("Unit not found");
-                throw new IllegalArgumentException("Unit not found");
-            }
-            if (ingredientInformation.amount().amount()<= 0) {
-                logger.warning("Amount is not valid");
-                throw new IllegalArgumentException("Amount is not valid");
-            }
-            IngredientsWithAmount newIngredient = new IngredientsWithAmount();
-            newIngredient.setIngredient(found.get());
-            newIngredient.setAmountInformation(new AmountInformation(ingredientInformation.amount().amount(), unit.get()));
-            newRecipe.addIngredientInformation(newIngredient);
-        }
-
-        for (CookingInstructionDTO cookingInstruction : recipe.cookingInstructions()) {
-            if (cookingInstruction.instruction() == null || cookingInstruction.instruction().isEmpty()) {
-                logger.warning("Instruction is null or empty");
-                throw new IllegalArgumentException("Instruction is null or empty");
-            }
-            CookingInstruction newInstruction = new CookingInstruction();
-            newInstruction.setInstruction(cookingInstruction.instruction());
-            newRecipe.addCookingInstruction(newInstruction);
-        }
-        if (recipe.isPublic() != null) {
-            newRecipe.setIsPublic(recipe.isPublic());
-        } else {
-            newRecipe.setIsPublic(false);
-        }
-        var recipeStored = recipeRepository.save(newRecipe);
+        var recipeStored = recipeMapper.mapRecipeDTOToRecipe(recipe);
         customerService.addRecipe(recipeStored, customerService.getEmail());
         return "Recipe added";
     }
