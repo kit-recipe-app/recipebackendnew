@@ -36,7 +36,7 @@ public class RecipeService {
     }
 
     public String addRecipe(RecipeDTO recipe) {
-        var recipeStored = recipeMapper.mapRecipeDTOToRecipe(recipe);
+        var recipeStored = recipeRepository.save(recipeMapper.mapRecipeDTOToRecipe(recipe));
         customerService.addRecipe(recipeStored, customerService.getEmail());
         return "Recipe added";
     }
