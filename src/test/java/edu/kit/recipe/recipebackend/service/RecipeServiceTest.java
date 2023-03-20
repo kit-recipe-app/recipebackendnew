@@ -56,7 +56,7 @@ class RecipeServiceTest {
                 recipeRepository,
                 imageRepository,
                 customerService,
-                new RecipeMapper(recipeRepository, ingredientRepository, unitRepository));
+                new RecipeMapper(ingredientRepository, unitRepository));
     }
 
 

@@ -7,5 +7,4 @@ import jakarta.validation.constraints.NotNull;
  * DTO for the name
  * @author Johannes Stephan
  */
-public record NameDTO(@NotNull @NotEmpty String name) {
-}
+public record NameDTO(@NotNull @NotEmpty String name) { }
