@@ -7,7 +7,6 @@ import edu.kit.recipe.recipebackend.dto.RecipeDTO;
 import edu.kit.recipe.recipebackend.entities.*;
 import edu.kit.recipe.recipebackend.entities.units.Unit;
 import edu.kit.recipe.recipebackend.repository.IngredientRepository;
-import edu.kit.recipe.recipebackend.repository.RecipeRepository;
 import edu.kit.recipe.recipebackend.repository.UnitRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -19,7 +18,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RecipeMapper {
 
-    private final RecipeRepository recipeRepository;
     private final IngredientRepository ingredientRepository;
     private final UnitRepository unitRepository;
 
@@ -60,7 +58,7 @@ public class RecipeMapper {
         } else {
             newRecipe.setIsPublic(false);
         }
-        return recipeRepository.save(newRecipe);
+        return newRecipe;
     }
 
 }

@@ -81,6 +81,8 @@ public class CustomerService {
         storedRecipe.get().setName(newRecipe.getName());
         storedRecipe.get().setDescription(newRecipe.getDescription());
         storedRecipe.get().setIsPublic(newRecipe.getIsPublic());
+        storedRecipe.get().setIngredients(newRecipe.getIngredients());
+        storedRecipe.get().setCookingInstructions(newRecipe.getCookingInstructions());
         recipeRepository.save(storedRecipe.get());
     }
 }
