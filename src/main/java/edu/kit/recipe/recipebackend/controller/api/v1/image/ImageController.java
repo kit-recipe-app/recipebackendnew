@@ -39,16 +39,19 @@ public class ImageController {
         if (file == null || file.isEmpty() || file.getOriginalFilename() == null || file.getOriginalFilename().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
+        ImageData imageData;
 
         try {
-            imageRepository.save(ImageData.builder()
+            imageData = imageRepository.save(ImageData.builder()
                     .name(file.getOriginalFilename())
                     .type(file.getContentType())
                     .image(ImageUtils.compressImage(file.getBytes())).build());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.OK).body(
+                imageData.getId().toString()
+        );
     }
 
 

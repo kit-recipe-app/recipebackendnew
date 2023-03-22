@@ -29,7 +29,7 @@ public class ImageData {
 
     //In further development this should be annotated with an imageType to prevent @Transactional Statements
     @Lob
-    @Column(length = 10000)
+    @Column(length = 100000)
     private byte[] image;
 
     @Override
