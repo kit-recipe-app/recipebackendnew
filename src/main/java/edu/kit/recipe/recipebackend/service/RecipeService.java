@@ -38,7 +38,7 @@ public class RecipeService {
     public String addRecipe(RecipeDTO recipe) {
         var recipeStored = recipeRepository.save(recipeMapper.mapRecipeDTOToRecipe(recipe));
         customerService.addRecipe(recipeStored, customerService.getEmail());
-        return "Recipe added";
+        return recipeStored.getId().toString();
     }
 
     public String addImageToRecipe(String recipeId, String imageId) {
