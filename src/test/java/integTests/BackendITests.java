@@ -96,7 +96,7 @@ class BackendITests {
                                 {
                                     "name": "RezeptName",
                                     "description": "RezeptBeschreibung",
-                                    "public": true,
+                                    "isPublic": true,
                                     "cookingInstructions": [
                                         {
                                             "instruction": "hihihi"
@@ -150,7 +150,15 @@ class BackendITests {
 		JSONArray jsonObject = new JSONArray(mvcResult.getResponse().getContentAsString());
 		assert jsonObject.length() == 1;
 		assert jsonObject.getJSONObject(0).getString("name").equals("RezeptName");
+
+		MvcResult mvcResult1 = this.mvc.perform(get("/api/v1/recipes").with(bearerToken(this.bennyOauth2Token)))
+				.andExpect(status().isOk())
+				.andReturn();
+		JSONArray jsonObject1 = new JSONArray(mvcResult1.getResponse().getContentAsString());
+		assert jsonObject1.length() == 1;
+		assert jsonObject1.getJSONObject(0).getString("name").equals("RezeptName");
 	}
+
 
 	@Test
 	void getUserInfo() throws Exception {
