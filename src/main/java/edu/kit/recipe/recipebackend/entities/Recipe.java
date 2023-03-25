@@ -33,9 +33,13 @@ public class Recipe {
 
     private Boolean isPublic = true;
 
-
-
     private String description;
+
+    private double calories = 0;
+    private int durationInMin = 0;
+
+    private String difficulty;
+
 
 
     @OneToMany(targetEntity = CookingInstruction.class, cascade = CascadeType.ALL)

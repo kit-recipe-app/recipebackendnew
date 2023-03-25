@@ -103,7 +103,7 @@ class RecipeServiceTest {
 
 
     private RecipeDTO getSampleRecipeDTO() {
-        NameDTO vegan = new NameDTO("Vegan");
+        TagDTO vegan = new TagDTO("Vegan");
         CookingInstructionDTO cookingInstructionDTO = new CookingInstructionDTO("TestInstruction");
         IngredientsWithAmountDTO ingredients = new IngredientsWithAmountDTO(
                 new IngredientDTO("Banane", vegan),
@@ -113,6 +113,9 @@ class RecipeServiceTest {
                 "Test",
                 "TestDescription",
                 false,
+                10,
+                500.0,
+                "leicht",
                 List.of(cookingInstructionDTO),
                 List.of(ingredients)
         );
