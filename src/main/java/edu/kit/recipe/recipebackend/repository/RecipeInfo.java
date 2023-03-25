@@ -1,5 +1,8 @@
 package edu.kit.recipe.recipebackend.repository;
 
+import edu.kit.recipe.recipebackend.repository.tag.TagInfo;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +58,7 @@ public interface RecipeInfo {
          */
         interface IngredientInfo {
             String getName();
+            TagInfo getTag();
         }
     }
 
@@ -63,5 +67,19 @@ public interface RecipeInfo {
      */
     interface ImageDataInfo1 {
         String getName();
+    }
+
+    default List<String> getTag() {
+        List<String> getTags = this.getIngredients().stream().map(ingredientsWithAmountInfo -> ingredientsWithAmountInfo.getIngredient().getTag().getName()).toList();
+        List<String> tags = new ArrayList<>();
+        if (getTags.contains("Omnivor")) {
+            tags.add("Omnivor");
+        } else if (getTags.contains("Vegetarisch")) {
+            tags.add("Vegetarisch");
+        }
+        else {
+            tags.add("Vegan");
+        }
+        return tags;
     }
 }
