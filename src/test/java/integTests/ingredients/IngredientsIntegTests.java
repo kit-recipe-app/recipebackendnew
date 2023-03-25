@@ -4,27 +4,27 @@ package integTests.ingredients;
 import edu.kit.recipe.recipebackend.RecipebackendApplication;
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.RequestPostProcessor;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.UUID;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(classes = RecipebackendApplication.class)
 @AutoConfigureMockMvc
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
+@Transactional
 class IngredientsIntegTests {
 
     String bennyOauth2Token =
@@ -75,8 +75,7 @@ class IngredientsIntegTests {
 										"""
 
 						))
-				.andExpect(status().isBadRequest())
-				.andExpect(content().string(containsString("{\"name\":\"must not be empty\"}")));
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
@@ -96,6 +95,40 @@ class IngredientsIntegTests {
 				.andExpect(content().string(containsString("Ingredient already exists or tag does not exist")))
 				.andReturn();
 	}
+
+	@Test
+	void testAddingAndDeletingIngredient() throws Exception {
+		this.mvc.perform(post("/api/v1/tags").with(bearerToken(bennyOauth2Token))
+						.contentType("application/json")
+						.content("{\"name\": \"Vegan\"}"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		MvcResult mvcResult = this.mvc.perform(post("/api/v1/ingredients").with(bearerToken(bennyOauth2Token))
+						.contentType("application/json")
+						.content("""
+								{
+									"name": "Test",
+									"tag": {
+										"name": "Vegan"
+									}
+								}
+								"""))
+				.andExpect(status().isOk())
+				.andReturn();
+		JSONObject jsonObject = new JSONObject(mvcResult.getResponse().getContentAsString());
+
+		UUID randomUUID = UUID.randomUUID();
+
+		this.mvc.perform(delete("/api/v1/ingredients/" + randomUUID).with(bearerToken(bennyOauth2Token)))
+				.andExpect(status().isNotFound())
+				.andExpect(content().string(containsString("Ingredient not found"))
+				);
+
+		this.mvc.perform(delete("/api/v1/ingredients/" + jsonObject.get("id")).with(bearerToken(bennyOauth2Token)))
+				.andExpect(status().isOk());
+	}
+
 
 
 

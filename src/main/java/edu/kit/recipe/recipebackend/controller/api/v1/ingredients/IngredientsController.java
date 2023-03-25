@@ -69,7 +69,7 @@ public class IngredientsController {
     public ResponseEntity<String> deleteIngredient(@PathVariable String id) {
         Optional<Ingredient> ingredient = ingredientRepository.findById(UUID.fromString(id));
         if (ingredient.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Ingredient not found");
         }
         ingredientRepository.delete(ingredient.get());
         return ResponseEntity.ok("Deleted");
