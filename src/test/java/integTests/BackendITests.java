@@ -17,6 +17,7 @@ package integTests;
 
 import edu.kit.recipe.recipebackend.RecipebackendApplication;
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -47,11 +48,11 @@ class BackendITests {
 	MockMvc mvc;
 
 
-	void before() throws Exception {
+	void setUpAll() throws Exception {
 		setUpUnits();
 		setUpTags();
 		setUpIngredients();
-		setupRecipes();
+		setUpRecipes();
 	}
 
 	void setUpUnits() throws Exception {
@@ -88,7 +89,7 @@ class BackendITests {
 				.andExpect(status().isOk());
 	}
 
-	void setupRecipes() throws Exception {
+	void setUpRecipes() throws Exception {
 		this.mvc.perform(post("/api/v1/recipes").with(bearerToken(this.bennyOauth2Token))
 						.contentType("application/json")
 						.content("""
@@ -141,7 +142,18 @@ class BackendITests {
 
 	@Test
 	void testRecipeCreation() throws Exception {
-		before();
+		setUpAll();
+	}
+
+	@Test
+	void testUserRecipes() throws Exception {
+		setUpAll();
+		MvcResult mvcResult = this.mvc.perform(get("/api/v1/user/recipes").with(bearerToken(this.bennyOauth2Token)))
+				.andExpect(status().isOk())
+				.andReturn();
+		JSONArray jsonObject = new JSONArray(mvcResult.getResponse().getContentAsString());
+		assert jsonObject.length() == 1;
+		assert jsonObject.getJSONObject(0).getString("name").equals("RezeptName");
 	}
 
 	@Test
