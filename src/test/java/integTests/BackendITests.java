@@ -96,6 +96,9 @@ class BackendITests {
                                 {
                                     "name": "RezeptName",
                                     "description": "RezeptBeschreibung",
+                                    "difficulty": "mittel",
+                                    "durationInMin": 10,
+                                    "calories": 100,
                                     "public": true,
                                     "cookingInstructions": [
                                         {

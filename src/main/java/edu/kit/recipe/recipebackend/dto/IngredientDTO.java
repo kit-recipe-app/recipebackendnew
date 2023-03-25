@@ -9,5 +9,5 @@ import jakarta.validation.constraints.NotNull;
  * @author Johannes Stephan
  */
 public record IngredientDTO(@NotNull @NotEmpty String name,
-                            @NotNull NameDTO tag) {
+                            @NotNull TagDTO tag) {
 }

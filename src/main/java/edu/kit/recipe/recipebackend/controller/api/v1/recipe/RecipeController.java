@@ -42,6 +42,16 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.deleteRecipe(id));
     }
 
+    @GetMapping("/saisonal")
+    public ResponseEntity<List<RecipeInfo>> getSaisonalRecipes() {
+        return ResponseEntity.ok(recipeService.getSaisonalRecipes());
+    }
+
+    @GetMapping("/recommended")
+    public ResponseEntity<List<RecipeInfo>> getRecommendedRecipes() {
+        return ResponseEntity.ok(recipeService.getRecommendedRecipes());
+    }
+
     /**
      * Adds a new recipe to the database
      * @param recipe the recipe to add

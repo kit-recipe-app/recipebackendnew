@@ -13,6 +13,12 @@ public interface RecipeInfo {
 
     String getDescription();
 
+    String getDifficulty();
+
+    double getCalories();
+
+    int getDurationInMin();
+
     List<CookingInstructionInfo> getCookingInstructions();
 
     List<IngredientsWithAmountInfo> getIngredients();

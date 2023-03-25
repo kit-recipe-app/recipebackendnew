@@ -27,6 +27,9 @@ public class RecipeMapper {
         Recipe newRecipe = new Recipe();
         newRecipe.setName(recipe.name());
         newRecipe.setDescription(recipe.description());
+        newRecipe.setCalories(recipe.calories());
+        newRecipe.setDifficulty(recipe.difficulty());
+        newRecipe.setDurationInMin(recipe.durationInMin());
         for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
             Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
             if (found.isEmpty()) {

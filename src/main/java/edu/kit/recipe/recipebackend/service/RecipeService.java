@@ -6,10 +6,13 @@ import edu.kit.recipe.recipebackend.entities.Recipe;
 import edu.kit.recipe.recipebackend.entities.image.ImageData;
 import edu.kit.recipe.recipebackend.mapper.RecipeMapper;
 import edu.kit.recipe.recipebackend.repository.ImageRepository;
+import edu.kit.recipe.recipebackend.repository.RecipeInfo;
 import edu.kit.recipe.recipebackend.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -54,5 +57,13 @@ public class RecipeService {
         recipe.get().setImageData(image.get());
         recipeRepository.save(recipe.get());
         return "Image added to recipe";
+    }
+
+    public List<RecipeInfo> getSaisonalRecipes() {
+        return new ArrayList<>();
+    }
+
+    public List<RecipeInfo> getRecommendedRecipes() {
+        return new ArrayList<>();
     }
 }
