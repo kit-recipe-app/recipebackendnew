@@ -160,6 +160,11 @@ class BackendITests {
 		JSONArray jsonObject1 = new JSONArray(mvcResult1.getResponse().getContentAsString());
 		assert jsonObject1.length() == 1;
 		assert jsonObject1.getJSONObject(0).getString("name").equals("RezeptName");
+		assert jsonObject1.getJSONObject(0).getString("description").equals("RezeptBeschreibung");
+		assert jsonObject1.getJSONObject(0).getString("difficulty").equals("mittel");
+		assert jsonObject1.getJSONObject(0).getInt("durationInMin") == 10;
+		assert jsonObject1.getJSONObject(0).getInt("calories") == 100;
+		assert jsonObject1.getJSONObject(0).getJSONArray("cookingInstructions").length() == 2;
 	}
 
 
