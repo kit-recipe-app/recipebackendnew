@@ -59,7 +59,6 @@ public class ImageController {
     @Transactional
     public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) {
         Optional<ImageData> dbImageData = imageRepository.findByName(fileName);
-
         if (dbImageData.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }

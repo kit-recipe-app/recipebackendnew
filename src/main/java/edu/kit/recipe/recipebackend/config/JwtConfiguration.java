@@ -8,9 +8,6 @@ import org.springframework.security.oauth2.core.DelegatingOAuth2TokenValidator;
 import org.springframework.security.oauth2.core.OAuth2TokenValidator;
 import org.springframework.security.oauth2.jwt.*;
 
-import java.util.List;
-
-import static org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames.AUD;
 
 
 /**
@@ -22,22 +19,19 @@ public class JwtConfiguration {
 
     @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuerUri;
+    @Value("${spring.security.oauth2.resourceserver.jwt.jwk-set-uri}")
+	String jwkSetUri;
 
     /**
      * Custom Oauth2 Validator for the audience.
      * @return the new JwtClaimValidator
      */
-    OAuth2TokenValidator<Jwt> audienceValidator() {
-        return new JwtClaimValidator<List<String>>(AUD, aud -> aud.contains("kit-recipe-app"));
-    }
 
     @Bean
     JwtDecoder jwtDecoder() {
-        NimbusJwtDecoder jwtDecoder = JwtDecoders.fromIssuerLocation(issuerUri);
-
-        OAuth2TokenValidator<Jwt> audienceValidator = audienceValidator();
+        NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withJwkSetUri(jwkSetUri).build();
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuerUri);
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
+        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer);
 
         jwtDecoder.setJwtValidator(withAudience);
 
