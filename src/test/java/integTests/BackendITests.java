@@ -140,10 +140,6 @@ class BackendITests {
 				.andExpect(content().string(containsString("Hello greendr4gon@protonmail.com!")));
 	}
 
-	@Test
-	void testRecipeCreation() throws Exception {
-		setUpAll();
-	}
 
 	@Test
 	void testUserRecipes() throws Exception {
