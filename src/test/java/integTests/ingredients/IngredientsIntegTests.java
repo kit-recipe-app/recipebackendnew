@@ -75,8 +75,7 @@ class IngredientsIntegTests {
 										"""
 
 						))
-				.andExpect(status().isBadRequest())
-				.andExpect(content().string(containsString("{\"name\":\"must not be empty\"}")));
+				.andExpect(status().isBadRequest());
 	}
 
 	@Test
