@@ -33,10 +33,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-/**
- *
- * @author Josh Cummings
- */
+
 @SpringBootTest(classes = RecipebackendApplication.class)
 @AutoConfigureMockMvc
 class BackendITests {
@@ -187,6 +184,14 @@ class BackendITests {
 				.andReturn();
 		String content1 = mvcResult1.getResponse().getContentAsString();
 		assertEquals(content1, "{\"name\":\"Benny\",\"email\":\"greendr4gon@protonmail.com\"}", false);
+	}
+
+	@Test
+	void addInvalidTags() throws Exception {
+		this.mvc.perform(post("/api/v1/tags").with(bearerToken(this.bennyOauth2Token))
+						.contentType("application/json")
+						.content("{\"name\":\"v1\"}"))
+				.andExpect(status().isBadRequest());
 	}
 
 

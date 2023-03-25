@@ -43,7 +43,7 @@ public class IngredientsController {
      * @return the added ingredient with the corresponding UUID
      */
     @PostMapping
-    public ResponseEntity<Ingredient> addIngredient(@RequestBody @Valid IngredientDTO ingredient) {
+    public ResponseEntity<Object> addIngredient(@Valid @RequestBody IngredientDTO ingredient) {
         Ingredient newIngredient = new Ingredient();
         newIngredient.setName(ingredient.name());
         Optional<Tag> tag = tagRepository.findByNameIgnoreCase(ingredient.tag().name());
@@ -51,7 +51,9 @@ public class IngredientsController {
                 ingredient.name()
             );
         if (found.isPresent() || tag.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    "Ingredient already exists or tag does not exist"
+            );
         }
         newIngredient.setTag(tag.get());
         return ResponseEntity.ok(ingredientRepository.save(newIngredient));
