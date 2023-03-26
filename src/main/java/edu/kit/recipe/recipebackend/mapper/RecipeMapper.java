@@ -33,14 +33,14 @@ public class RecipeMapper {
         for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
             Optional<Ingredient> found = ingredientRepository.findTopByNameIgnoreCase(ingredientInformation.ingredient().name());
             if (found.isEmpty()) {
-                throw new IllegalArgumentException("Ingredient not found");
+                throw new IllegalArgumentException("Ingredient: " + ingredientInformation.ingredient().name() + " not found");
             }
             Optional<Unit> unit = unitRepository.findByNameContainsIgnoreCase(ingredientInformation.amount().unit());
             if (unit.isEmpty()) {
-                throw new IllegalArgumentException("Unit not found");
+                throw new IllegalArgumentException("Unit: " + ingredientInformation.amount().unit() + " not found");
             }
             if (ingredientInformation.amount().amount()<= 0) {
-                throw new IllegalArgumentException("Amount is not valid");
+                throw new IllegalArgumentException("Amount is negative or zero");
             }
             IngredientsWithAmount newIngredient = new IngredientsWithAmount();
             newIngredient.setIngredient(found.get());
