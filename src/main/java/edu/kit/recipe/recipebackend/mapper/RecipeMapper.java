@@ -14,6 +14,9 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 
+/**
+ * Mapperclass for Recipes
+ */
 @Component
 @RequiredArgsConstructor
 public class RecipeMapper {
@@ -22,7 +25,11 @@ public class RecipeMapper {
     private final UnitRepository unitRepository;
 
 
-
+    /**
+     * Maps a RecipeDTO to a Recipe and checks if the ingredients and units are valid
+     * @param recipe the RecipeDTO
+     * @return the parsed Recipe
+     */
     public Recipe mapRecipeDTOToRecipe(RecipeDTO recipe) {
         Recipe newRecipe = new Recipe();
         newRecipe.setName(recipe.name());

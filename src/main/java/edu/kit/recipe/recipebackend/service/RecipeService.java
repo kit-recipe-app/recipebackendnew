@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+/**
+ * Service for the recipe
+ */
 @Service
 @RequiredArgsConstructor
 public class RecipeService {
@@ -25,6 +28,11 @@ public class RecipeService {
     private final RecipeMapper recipeMapper;
 
 
+    /**
+     * Deletes a recipe
+     * @param id the id of the recipe
+     * @return "Recipe deleted"
+     */
     public String deleteRecipe(String id) {
         Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(id));
         if (recipe.isEmpty()) {
@@ -35,12 +43,23 @@ public class RecipeService {
         return "Recipe deleted";
     }
 
+    /**
+     * Adds a recipe
+     * @param recipe the recipe
+     * @return the id of the recipe
+     */
     public String addRecipe(RecipeDTO recipe) {
         var recipeStored = recipeRepository.save(recipeMapper.mapRecipeDTOToRecipe(recipe));
         customerService.addRecipe(recipeStored, customerService.getEmail());
         return recipeStored.getId().toString();
     }
 
+    /**
+     * Adds an image to a recipe
+     * @param recipeId the id of the recipe
+     * @param imageId the id of the image
+     * @return "Image added to recipe"
+     */
     public String addImageToRecipe(String recipeId, String imageId) {
         Optional<Recipe> recipe = recipeRepository.findById(UUID.fromString(recipeId));
         if (recipe.isEmpty()) {
@@ -56,16 +75,24 @@ public class RecipeService {
         return "Image added to recipe";
     }
 
+    /**
+     * Gets all saisonal recipes
+     * @return the recipes
+     */
     public List<RecipeInfo> getSaisonalRecipes() {
         List<RecipeInfo> allRecipes = recipeRepository.findByIsPublicTrue();
         Collections.shuffle(allRecipes);
         return allRecipes.subList(0, Math.min(5, allRecipes.size()));
     }
 
+    /**
+     * Gets all recommended recipes
+     * @return the recipes
+     */
     public List<RecipeInfo> getRecommendedRecipes() {
         List<RecipeInfo> allRecipes = recipeRepository.findByIsPublicTrue();
         Collections.shuffle(allRecipes);
-        return allRecipes.subList(0, Math.min(5, allRecipes.size()));
+        return allRecipes.subList(0, Math.min(3, allRecipes.size()));
     }
 
 }

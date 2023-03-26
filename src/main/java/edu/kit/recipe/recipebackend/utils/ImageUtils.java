@@ -4,6 +4,10 @@ import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
+/**
+ * Utility class for image compression
+ * @author Johannes Stephan
+ */
 public class ImageUtils {
 
     private ImageUtils() {
@@ -11,6 +15,11 @@ public class ImageUtils {
     }
 
 
+    /**
+     * Compresses the image
+     * @param data the image
+     * @return the compressed image
+     */
     public static byte[] compressImage(byte[] data) {
         Deflater deflater = new Deflater();
         deflater.setLevel(Deflater.BEST_COMPRESSION);
@@ -32,7 +41,11 @@ public class ImageUtils {
     }
 
 
-
+    /**
+     * Decompresses the image
+     * @param data the image
+     * @return the decompressed image
+     */
     public static byte[] decompressImage(byte[] data) {
         Inflater inflater = new Inflater();
         inflater.setInput(data);

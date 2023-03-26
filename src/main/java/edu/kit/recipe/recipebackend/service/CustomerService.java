@@ -19,6 +19,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+
+/**
+ * Service for the customer
+ */
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
@@ -27,12 +31,21 @@ public class CustomerService {
     private final RecipeMapper recipeMapper;
 
 
-
+    /**
+     * Retrieves the customer information
+     * @param email the email of the customer
+     * @return the customer
+     */
     public Customer getCustomerInformation(String email) {
         return customerRepository.findByEmail(email).get(0);
     }
 
 
+    /**
+     * Changes the name of the customer
+     * @param name the new name
+     * @param email the email of the customer
+     */
     public void changeCustomerName(@NotNull String name, String email) {
         Customer customer = getCustomerInformation(email);
         customer.setName(name);
@@ -40,7 +53,10 @@ public class CustomerService {
     }
 
 
-
+    /**
+     * Gets the email of the current-login user
+     * @return the email
+     */
     @SneakyThrows
     public String getEmail() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,22 +67,43 @@ public class CustomerService {
     }
 
 
+    /**
+     * Adds a recipe to the customer
+     * @param recipeStored the recipe
+     * @param email the email of the customer
+     */
     public void addRecipe(Recipe recipeStored, String email) {
         Customer customer = getCustomerInformation(email);
         customer.getRecipes().add(recipeStored);
         customerRepository.save(customer);
     }
 
+    /**
+     * Gets all recipes of the customer
+     * @param email the email of the customer
+     * @return the recipes
+     */
     public List<RecipeInfo> getRecipes(String email) {
         return customerRepository.getByEmail(email).getRecipe();
     }
 
+    /**
+     * Deletes a user recipe
+     * @param email the email of the customer
+     * @param id the id of the recipe
+     */
     public void deleteRecipe(String email, UUID id) {
         Customer customer = getCustomerInformation(email);
         customer.getRecipes().removeIf(recipe -> recipe.getId().equals(id));
         customerRepository.save(customer);
     }
 
+    /**
+     * Updates a recipe
+     * @param email the email of the customer
+     * @param id the id of the recipe
+     * @param recipe the new recipe
+     */
     public void updateRecipe(String email, UUID id, RecipeDTO recipe) {
         Optional<Recipe> storedRecipe =  recipeRepository.findById(id);
         if (storedRecipe.isEmpty()) {
