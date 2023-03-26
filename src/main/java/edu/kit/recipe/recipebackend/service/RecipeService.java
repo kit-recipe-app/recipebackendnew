@@ -11,10 +11,7 @@ import edu.kit.recipe.recipebackend.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -60,10 +57,15 @@ public class RecipeService {
     }
 
     public List<RecipeInfo> getSaisonalRecipes() {
-        return new ArrayList<>();
+        List<RecipeInfo> allRecipes = recipeRepository.findByIsPublicTrue();
+        Collections.shuffle(allRecipes);
+        return allRecipes.subList(0, Math.min(5, allRecipes.size()));
     }
 
     public List<RecipeInfo> getRecommendedRecipes() {
-        return new ArrayList<>();
+        List<RecipeInfo> allRecipes = recipeRepository.findByIsPublicTrue();
+        Collections.shuffle(allRecipes);
+        return allRecipes.subList(0, Math.min(5, allRecipes.size()));
     }
+
 }
