@@ -92,7 +92,7 @@ class IngredientsIntegTests {
 								}
 								"""))
 				.andExpect(status().isForbidden())
-				.andExpect(content().string(containsString("Ingredient already exists or tag does not exist")))
+				.andExpect(content().string(containsString("Tag does not exist")))
 				.andReturn();
 	}
 
@@ -127,6 +127,57 @@ class IngredientsIntegTests {
 
 		this.mvc.perform(delete("/api/v1/ingredients/" + jsonObject.get("id")).with(bearerToken(bennyOauth2Token)))
 				.andExpect(status().isOk());
+	}
+
+	@Test
+	void testMultipleIngredients() throws Exception {
+		//Adding tags
+		this.mvc.perform(post("/api/v1/tags").with(bearerToken(bennyOauth2Token))
+						.contentType("application/json")
+						.content("{\"name\": \"Vegan\"}"))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		//Adding ingredients
+		this.mvc.perform(post("/api/v1/ingredients").with(bearerToken(bennyOauth2Token))
+						.contentType("application/json")
+						.content("""
+								{
+									"name": "Risottoreis",
+									"tag": {
+										"name": "Vegan"
+									}
+								}
+								"""))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		this.mvc.perform(post("/api/v1/ingredients").with(bearerToken(bennyOauth2Token))
+						.contentType("application/json")
+						.content("""
+								{
+									"name": "Reis",
+									"tag": {
+										"name": "Vegan"
+									}
+								}
+								"""))
+				.andExpect(status().isOk())
+				.andReturn();
+
+		this.mvc.perform(post("/api/v1/ingredients").with(bearerToken(bennyOauth2Token))
+						.contentType("application/json")
+						.content("""
+								{
+									"name": "Kirschtomaten",
+									"tag": {
+										"name": "Vegan"
+									}
+								}
+								"""))
+				.andExpect(status().isOk())
+				.andReturn();
+
 	}
 
 

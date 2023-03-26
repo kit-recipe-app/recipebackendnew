@@ -31,7 +31,7 @@ public class RecipeMapper {
         newRecipe.setDifficulty(recipe.difficulty());
         newRecipe.setDurationInMin(recipe.durationInMin());
         for (IngredientsWithAmountDTO ingredientInformation : recipe.ingredients()) {
-            Optional<Ingredient> found = ingredientRepository.findByNameContainsIgnoreCase(ingredientInformation.ingredient().name());
+            Optional<Ingredient> found = ingredientRepository.findTopByNameIgnoreCase(ingredientInformation.ingredient().name());
             if (found.isEmpty()) {
                 throw new IllegalArgumentException("Ingredient not found");
             }

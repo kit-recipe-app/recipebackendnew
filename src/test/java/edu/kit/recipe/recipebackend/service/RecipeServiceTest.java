@@ -82,7 +82,7 @@ class RecipeServiceTest {
         Recipe recipe = new Recipe();
         UUID randomUUID = UUID.randomUUID();
         recipe.setId(randomUUID);
-        when(ingredientRepository.findByNameContainsIgnoreCase("Banane")).thenReturn(Optional.of(ingredient));
+        when(ingredientRepository.findTopByNameIgnoreCase("Banane")).thenReturn(Optional.of(ingredient));
         when(unitRepository.findByNameContainsIgnoreCase("Stück")).thenReturn(java.util.Optional.of(unit));
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
         String result = recipeService.addRecipe(getSampleRecipeDTO());
