@@ -47,12 +47,17 @@ public class IngredientsController {
         Ingredient newIngredient = new Ingredient();
         newIngredient.setName(ingredient.name());
         Optional<Tag> tag = tagRepository.findByNameIgnoreCase(ingredient.tag().name());
-        Optional<Ingredient> found =  ingredientRepository.findByNameContainsIgnoreCase(
-                ingredient.name()
-            );
-        if (found.isPresent() || tag.isEmpty()) {
+        Optional<Ingredient> found = ingredientRepository.findTopByNameIgnoreCase(ingredient.name());
+
+        if (tag.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
-                    "Ingredient already exists or tag does not exist"
+                    "Tag does not exist"
+            );
+        }
+
+        if (found.isPresent()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(
+                    "Ingredient " + found.get().getName() +  " already exists!"
             );
         }
         newIngredient.setTag(tag.get());
