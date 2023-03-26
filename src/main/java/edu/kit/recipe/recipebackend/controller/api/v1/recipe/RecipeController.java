@@ -42,11 +42,20 @@ public class RecipeController {
         return ResponseEntity.ok().body(recipeService.deleteRecipe(id));
     }
 
+
+    /**
+     * Gets saisonal recipes
+     * @return a list of recipes
+     */
     @GetMapping("/saisonal")
     public ResponseEntity<List<RecipeInfo>> getSaisonalRecipes() {
         return ResponseEntity.ok(recipeService.getSaisonalRecipes());
     }
 
+    /**
+     * Gets recommended recipes for a user
+     * @return a list of recipes
+     */
     @GetMapping("/recommended")
     public ResponseEntity<List<RecipeInfo>> getRecommendedRecipes() {
         return ResponseEntity.ok(recipeService.getRecommendedRecipes());

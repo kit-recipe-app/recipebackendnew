@@ -4,7 +4,5 @@ spring:
   datasource:
     hikari:
       auto-commit: false
-  config:
-    import: optional:oauth.yaml
   profiles:
     active: prod

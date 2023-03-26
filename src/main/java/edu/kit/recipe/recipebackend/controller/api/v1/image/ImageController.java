@@ -55,12 +55,19 @@ public class ImageController {
     }
 
 
+    /**
+     * Downloads an image from the database.
+     * @param fileName the name of the image to download
+     * @return 200 if the image was downloaded successfully, 404 if the image was not found
+     */
     @GetMapping("/{fileName}")
     @Transactional
-    public ResponseEntity<byte[]> downloadImage(@PathVariable String fileName) {
+    public ResponseEntity<Object> downloadImage(@PathVariable String fileName) {
         Optional<ImageData> dbImageData = imageRepository.findByName(fileName);
         if (dbImageData.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    "Image was not found"
+            );
         }
         byte[] imageData = ImageUtils.decompressImage(dbImageData.get().getImage());
         return ResponseEntity.status(HttpStatus.OK)
@@ -68,6 +75,10 @@ public class ImageController {
                 .body(imageData);
     }
 
+    /**
+     * Gets all image ids that are in the database
+     * @return a list of all image ids
+     */
     @GetMapping
     public ResponseEntity<List<ImageDataInfo>> listAllImageIds() {
         return ResponseEntity.ok(imageRepository.findAllProjectedBy());

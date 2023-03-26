@@ -19,6 +19,12 @@ public class LoginSuccessListener implements ApplicationListener<AuthenticationS
 
     private final CustomerRepository customerRepository;
 
+
+    /**
+     * Waits for succesful authentication and creates a new user entry
+     * in the database if the user is not already registered.
+     * @param event the event that is fired when a user is authenticated
+     */
     @Override
     public void onApplicationEvent(AuthenticationSuccessEvent event) {
         JwtAuthenticationToken authentication = (JwtAuthenticationToken) event.getAuthentication();
@@ -26,6 +32,10 @@ public class LoginSuccessListener implements ApplicationListener<AuthenticationS
         createNewUserEntryInDB(email);
     }
 
+    /**
+     * Creates a new user entry in the database if the user is not already registered.
+     * @param email the email of the registered user
+     */
     private void createNewUserEntryInDB(String email) {
         if (customerRepository.findByEmail(email).isEmpty()) {
             Customer customer = new Customer();

@@ -52,6 +52,12 @@ public class CustomerController {
         return ResponseEntity.ok("Recipe deleted");
     }
 
+    /**
+     * Updates a recipe of the current logged-in user
+     * @param recipe the new recipe
+     * @param id the id of the recipe to update
+     * @return the id of the updated recipe
+     */
     @PutMapping("/recipes/{id}")
     public ResponseEntity<String> updateRecipe(@RequestBody @Valid RecipeDTO recipe, @PathVariable String id) {
         customerService.updateRecipe(customerService.getEmail(), UUID.fromString(id), recipe);
